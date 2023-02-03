@@ -1,20 +1,25 @@
-import React, { useState } from "react";
+import React from "react";
 import SearchIcon from "@mui/icons-material/Search";
 import MapRoundedIcon from "@mui/icons-material/MapRounded";
+import Link from "next/link";
+import Image from "next/image";
 
 const Navbar = () => {
   return (
-    <div className="grid grid-cols-1 md:grid-cols-4 my-2 items-center justify-center border-b">
-      <div className="mx-auto md:mx-0">
-        <img
-          src="/geologo.png"
-          alt="Shenda Logo"
-          width={"60px"}
-          className="ml-8"
-        />
+    <div className="h-full grid grid-cols-1 md:grid-cols-4 items-center justify-center border-b">
+      <div className="mt-2 mx-auto md:mx-0">
+        <Link href="/">
+          <Image
+            src="/geologo.png"
+            alt="Shenda Logo"
+            width={60}
+            height={60}
+            className="mr-auto ml-10"
+          />
+        </Link>
       </div>
 
-      <div className="col-span-2  md:border-x-2 md:border-slate-200 md:px-6 my-6 md:my-0">
+      <div className="col-span-2 md:border-x-2 md:border-slate-200 md:px-6 my-6 md:my-0">
         <div className=" flex justify-between items-center">
           <h2 className="font-bold text-2xl">Location</h2>
           <MapRoundedIcon />
