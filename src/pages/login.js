@@ -8,7 +8,6 @@ import logo from "../../public/geologo.png";
 import { useRouter } from "next/router";
 
 export default function Login() {
-  // State variables
   const [formLogin, setFormLogin] = useState({
     username: "",
     password: "",
