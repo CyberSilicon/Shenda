@@ -19,7 +19,6 @@ export default function App({ Component, pageProps }) {
 
   useLayoutEffect(() => {
     getCurrentUser();
-    console.log(currentUser);
   }, [currentUser]);
   return (
     <>

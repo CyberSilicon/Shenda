@@ -1,7 +1,8 @@
+// react/no-unescaped-entities
 import Head from "next/head";
 import Image from "next/image";
 import Link from "next/link";
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useState } from "react";
 import Parse from "../services/parse";
 import logo from "../../public/geologo.png";
 import { useRouter } from "next/router";
@@ -15,7 +16,6 @@ export default function Login() {
 
   const ChangeValueInput = useCallback(
     (e) => {
-      console.log(e.value);
       formLogin[e.name] = e.value;
     },
     [formLogin]
@@ -40,7 +40,7 @@ export default function Login() {
       console.log(`Error! ${error.message}`);
       return false;
     }
-  }, []);
+  }, [formLogin]);
 
   return (
     <>
