@@ -1,6 +1,7 @@
 import "@/styles/globals.css";
 import { useCallback, useLayoutEffect, useState } from "react";
 import Parse from "@/services/parse";
+import Layout from "@/components/Layout";
 
 export default function App({ Component, pageProps }) {
   const [currentUser, setCurrentUser] = useState();
@@ -20,5 +21,11 @@ export default function App({ Component, pageProps }) {
     getCurrentUser();
     console.log(currentUser);
   }, [currentUser]);
-  return <Component {...pageProps} />;
+  return (
+    <>
+      <Layout>
+        <Component {...pageProps} />
+      </Layout>
+    </>
+  );
 }
