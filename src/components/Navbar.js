@@ -6,7 +6,7 @@ import Image from "next/image";
 
 const Navbar = () => {
   return (
-    <div className="h-full grid grid-cols-1 md:grid-cols-4 items-center justify-center border-b">
+    <div className="grid grid-cols-1 md:grid-cols-4 items-center justify-center border-b">
       <div className="mt-2 mx-auto md:mx-0">
         <Link href="/">
           <Image

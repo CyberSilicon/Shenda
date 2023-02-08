@@ -5,19 +5,19 @@ import RightSideBar from "./RightSideBar";
 
 const HomePage = () => {
   return (
-    <>
-      <div className="grid grid-cols-1 md:grid-cols-4">
-        <div className="px-10">
+    <div>
+      <div className="h-screen flex">
+        <div className="">
           <LeftSidebar />
         </div>
-        <div className="col-span-2 border-x-2 border-t-slate-800 px-6">
+        <div className="flex w-3/5 ">
           <MainView />
         </div>
-        <div className="px-6">
+        <div className="flex flex-auto">
           <RightSideBar />
         </div>
       </div>
-    </>
+    </div>
   );
 };
 
