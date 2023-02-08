@@ -1,7 +1,7 @@
 import Head from "next/head";
 import Image from "next/image";
 import React, { useCallback, useState } from "react";
-import Parse from "@/services/parse";
+import Parse from "../services/parse";
 import Link from "next/link";
 import logo from "../../public/geologo.png";
 

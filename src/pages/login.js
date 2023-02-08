@@ -8,7 +8,7 @@ import logo from "../../public/geologo.png";
 import { useRouter } from "next/router";
 
 export default function Login() {
-  const [formLogin, setFormLogin] = useState({
+  const [formLogin] = useState({
     username: "",
     password: "",
   });
@@ -30,7 +30,7 @@ export default function Login() {
       );
       // logIn returns the corresponding ParseUser object
       if (loggedInUser !== null && loggedInUser !== undefined) {
-        console.log(await loggedInUser);
+        console.log(loggedInUser);
         router.push("/");
         return true;
       }
