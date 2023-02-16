@@ -1,13 +1,14 @@
 import React from "react";
 
-import HomeIcon from "@mui/icons-material/Home";
-import TagIcon from "@mui/icons-material/Tag";
-import PersonIcon from "@mui/icons-material/Person";
+import HomeRoundedIcon from "@mui/icons-material/HomeRounded";
+import TagRoundedIcon from "@mui/icons-material/TagRounded";
+import PersonPinIcon from "@mui/icons-material/PersonPin";
 import LogoutRoundedIcon from "@mui/icons-material/LogoutRounded";
 
 import Parse from "../services/parse";
 import Link from "next/link";
 import Image from "next/image";
+import { Router } from "next/router";
 
 const doUserLogOut = async () => {
   try {
@@ -19,7 +20,7 @@ const doUserLogOut = async () => {
 
 const LeftSidebar = () => {
   return (
-    <div className="flex h-screen top-0 left-0 ">
+    <div className="flex h-screen top-0 left-0">
       <div className="flex flex-col justify-between items-center w-16 m-1 p-1">
         <div className="space-y-2">
           <div className="border-b-2">
@@ -34,22 +35,37 @@ const LeftSidebar = () => {
             </Link>
           </div>
           <div>
-            <SideBarIcon icon={<HomeIcon fontSize="large" />} />
+            <SideBarIcon
+              iconToolTip="Home"
+              icon={<HomeRoundedIcon fontSize="large" />}
+            />
           </div>
           <div>
-            <SideBarIcon icon={<TagIcon fontSize="large" />} />
+            <SideBarIcon
+              iconToolTip="Events"
+              icon={<TagRoundedIcon fontSize="large" />}
+            />
           </div>
           <div>
-            <SideBarIcon icon={<TagIcon fontSize="large" />} />
+            <SideBarIcon
+              iconToolTip="Random Tag"
+              icon={<TagRoundedIcon fontSize="large" />}
+            />
           </div>
         </div>
 
         <div className="space-y-2">
           <div>
-            <SideBarIcon icon={<PersonIcon fontSize="large" />} />
+            <SideBarIcon
+              iconToolTip="Profile"
+              icon={<PersonPinIcon fontSize="large" />}
+            />
           </div>
           <button onClick={doUserLogOut}>
-            <SideBarIcon icon={<LogoutRoundedIcon fontSize="large" />} />
+            <SideBarIcon
+              iconToolTip="Log Out"
+              icon={<LogoutRoundedIcon fontSize="large" />}
+            />
           </button>
         </div>
       </div>
@@ -57,10 +73,10 @@ const LeftSidebar = () => {
   );
 };
 
-const SideBarIcon = ({ icon, text = "tooltip" }) => (
+const SideBarIcon = ({ icon, iconToolTip = "tooltip" }) => (
   <div className="sidebar-icon group">
     {icon}
-    <span className="sidebar-tooltip group-hover:scale-100">{text}</span>
+    <span className="sidebar-tooltip group-hover:scale-100">{iconToolTip}</span>
   </div>
 );
 

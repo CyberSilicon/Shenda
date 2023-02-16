@@ -27,11 +27,13 @@ export default function Login() {
       const loggedInUser = await Parse.User.logIn(
         formLogin.username,
         formLogin.password
-      );
+      ).then((user) => {
+        router.push("/");
+      });
       // logIn returns the corresponding ParseUser object
       if (loggedInUser !== null && loggedInUser !== undefined) {
         console.log(loggedInUser);
-        router.push("/");
+        // router.push("/");
         return true;
       }
     } catch (error) {

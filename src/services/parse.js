@@ -1,5 +1,6 @@
 //at services/parse.js
-import Parse from "parse";
+//import Parse from "parse";
+import Parse from "parse/dist/parse.min.js";
 
 //checking if env is browser
 if (typeof window !== "undefined") {

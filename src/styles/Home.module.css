@@ -1,0 +1,71 @@
+.container {
+  display: flex;
+  height: 100vh;
+  flex-direction: column;
+}
+
+.messagesContainer {
+  height: calc(100vh - 50px);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+}
+
+.messagesContainer ul {
+  overflow-y: auto;
+  margin-bottom: 5px;
+  padding: 0 40px;
+}
+.messagesContainer ul li {
+  list-style: none;
+  background: #d1d1ff;
+  display: block;
+  margin-top: 10px;
+  border-radius: 8px;
+  padding: 5px 10px;
+  inline-size: fit-content;
+}
+.messagesContainer ul li.myMessage {
+  list-style: none;
+  background: #d4ffd1;
+  display: block;
+  margin-top: 10px;
+  border-radius: 8px;
+  padding: 5px 10px;
+  inline-size: fit-content;
+}
+.messagesContainer ul li span {
+  color: #4848ff;
+}
+.messagesContainer ul li span.myMessage {
+  color: #318e2b;
+}
+
+.messagesContainer div {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.messagesContainer div.myMessage {
+  display: flex;
+  justify-content: flex-start;
+}
+
+.messagesContainer ul li p {
+  margin: 0;
+  padding-top: 8px;
+  margin-bottom: 5px;
+}
+.actionsContainer {
+  height: 50px;
+  display: flex;
+  padding: 10px 20px;
+}
+
+.actionsContainer input {
+  flex: 8;
+  word-break: break-word;
+}
+.actionsContainer textarea {
+  flex: 8;
+}
