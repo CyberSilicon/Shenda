@@ -14,10 +14,11 @@
     "@mui/icons-material": "^5.11.0",
     "@mui/material": "^5.11.7",
     "@next/font": "13.1.6",
+    "@parse/react-ssr": "^0.0.1-alpha.18",
     "eslint": "8.32.0",
     "eslint-config-next": "13.1.6",
     "next": "13.1.6",
-    "parse": "^4.0.0",
+    "parse": "^4.0.1",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "recoil": "^0.7.6"
