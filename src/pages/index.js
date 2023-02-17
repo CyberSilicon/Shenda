@@ -15,7 +15,7 @@ export default function Home() {
     try {
       // Update state variable holding current user
       const session = await Parse.User.current();
-      console.log("session is: " + session);
+      // console.log("session is: " + session);
       setCurrentUser(session);
     } catch (e) {
       console.log("ERROR!", e.message);

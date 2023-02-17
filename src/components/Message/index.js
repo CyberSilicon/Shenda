@@ -3,13 +3,14 @@ import {
   useState,
   useRef,
   useEffect,
-  useMemo,
   useCallback,
 } from "react";
 import styles from "../../styles/Home.module.css";
 import Parse from "../../services/parse";
 import { useRouter } from "next/router";
-import MessageInput from "./MessageInput";
+import { client } from "../../config/LiveQueryClient";
+import _ from "lodash";
+
 // import { encodeParseQuery, useParseQuery } from "@parse/react-ssr";
 
 export default function Auth() {
@@ -23,14 +24,12 @@ export default function Auth() {
     e.preventDefault();
     const Message = Parse.Object.extend("Message");
     const newMessage = new Message();
-    const res = await newMessage.save({
+    newMessage.save({
       content: inputMessage,
       senderName: Parse.User.current().get("username"),
       senderId: Parse.User.current().id,
     });
 
-    setMessage([...message, await res]);
-    console.log(await res);
     setInputMessage("");
 
     const el = document.getElementById("chat-feed");
@@ -44,25 +43,44 @@ export default function Auth() {
   //     return a.get("createdAt") - b.get("createdAt");
   //   });
   // };
-
   const handleGetMessage = useCallback(async () => {
     const parseQuery = new Parse.Query("Message");
     parseQuery.ascending("createdAt");
-    // parseQuery.greaterThanOrEqualTo("createdAt", new Date());
-
     const resultQuery = await parseQuery.find();
 
     setMessage(resultQuery);
     return true;
+  }, []);
+
+  const handleGetLiveMessage = useCallback(async () => {
+    const parseQuery = new Parse.Query("Message");
+    parseQuery.ascending("createdAt");
+
+    let subscription = await client.subscribe(parseQuery);
+
+    // subscription.on("open", (msgs) => {
+    // setMessage(msgs);
+    // });
+    const newArr = _.cloneDeep(message);
+    const dd = [...newArr];
+
+    subscription.on(
+      "create",
+      async (m) => {
+        setMessage((dd) => dd.concat([m]));
+        // setMessage(newArr, m);
+      },
+      []
+    );
+    // return () => subscription.unsubscribe();
+    // parseQuery.greaterThanOrEqualTo("createdAt", new Date());
+
+    return true;
   }, [message, setMessage]);
 
-  // const handleTestMessage = useMemo(() => {
-  //   console.log(message);
-  // }, [message]);
-
-  useLayoutEffect(() => {
+  useEffect(() => {
     handleGetMessage();
-    // handleTestMessage;
+    handleGetLiveMessage();
   }, []);
 
   function useChatScroll(dep) {
@@ -113,11 +131,19 @@ export default function Auth() {
             ))}
         </ul>
       </div>
-      <form onSubmit={handleSubmitMessage} className={styles.actionsContainer}>
-        <input value={inputMessage} onChange={handleupdateInput} />
-        <button className="bg-pink-800">send</button>
-      </form>
-      {/* <MessageInput /> */}
+      <div className="p-1 bg-transparent">
+        <form
+          onSubmit={handleSubmitMessage}
+          className={styles.actionsContainer}
+        >
+          <input
+            placeholder="Enter your message..."
+            value={inputMessage}
+            onChange={handleupdateInput}
+          />
+          <button className="text-pink-900 text-lg">Send</button>
+        </form>
+      </div>
     </div>
   );
 }

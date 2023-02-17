@@ -1,11 +1,12 @@
 .container {
   display: flex;
+  flex: 1;
   height: 100vh;
   flex-direction: column;
 }
 
 .messagesContainer {
-  height: calc(100vh - 50px);
+  height: calc(100vh - 10vh);
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
@@ -36,19 +37,25 @@
 }
 .messagesContainer ul li span {
   color: #4848ff;
+  font-size: small;
+  display: flex;
+  justify-content: flex-start;  
 }
 .messagesContainer ul li span.myMessage {
   color: #318e2b;
-}
-
-.messagesContainer div {
+  font-size: small;
   display: flex;
   justify-content: flex-end;
 }
 
-.messagesContainer div.myMessage {
+.messagesContainer div {
   display: flex;
   justify-content: flex-start;
+}
+
+.messagesContainer div.myMessage {
+  display: flex;
+  justify-content: flex-end;
 }
 
 .messagesContainer ul li p {
@@ -59,12 +66,25 @@
 .actionsContainer {
   height: 50px;
   display: flex;
-  padding: 10px 20px;
+  margin: 5px;
+  padding: 10px 15px;
+  background-color: rgb(247, 247, 247);
+  border-radius: 20px;
+  color: black;  
+  /* border-top-left-radius: 15px;
+  border-top-right-radius: 15px; */
+}
+.actionsContainer:hover {
+  box-shadow: 0px 0px 5px gray ;
 }
 
 .actionsContainer input {
   flex: 8;
   word-break: break-word;
+  margin-right: 10px;
+  outline: none;
+  background-color: rgb(247, 247, 247);
+  border-right: 1px solid lightgray;
 }
 .actionsContainer textarea {
   flex: 8;
