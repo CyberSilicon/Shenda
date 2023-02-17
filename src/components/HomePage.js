@@ -7,8 +7,10 @@ const HomePage = () => {
   return (
     <div className="h-screen flex flex-row">
       <LeftSidebar />
+      {/* <div> */}
       <MainView />
       <RightSideBar />
+      {/* </div> */}
     </div>
   );
 };

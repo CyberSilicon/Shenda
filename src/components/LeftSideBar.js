@@ -20,7 +20,7 @@ const doUserLogOut = async () => {
 
 const LeftSidebar = () => {
   return (
-    <div className="flex h-screen top-0 left-0">
+    <div className="flex top-0 left-0">
       <div className="flex flex-col justify-between items-center w-16 m-1 p-1">
         <div className="space-y-2">
           <div className="border-b-2">
@@ -54,7 +54,7 @@ const LeftSidebar = () => {
           </div>
         </div>
 
-        <div className="space-y-2">
+        <div className="space-y-1">
           <div>
             <SideBarIcon
               iconToolTip="Profile"
