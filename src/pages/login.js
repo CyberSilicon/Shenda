@@ -1,11 +1,13 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 // react/no-unescaped-entities
 import Head from "next/head";
 import Image from "next/image";
 import Link from "next/link";
 import React, { useCallback, useState } from "react";
-import Parse from "../services/parse";
 import logo from "../../public/geologo.png";
 import { useRouter } from "next/router";
+import { callParseLogin } from '../lib/api';
+import Cookies from "js-cookie";
 
 export default function Login() {
   const [formLogin] = useState({
@@ -21,21 +23,25 @@ export default function Login() {
   );
 
   const router = useRouter();
+
   const doUserLogIn = useCallback(async () => {
     // Note that these values come from state variables that we've declared before
     try {
-      const loggedInUser = await Parse.User.logIn(
-        formLogin.username,
-        formLogin.password
-      ).then((user) => {
-        router.push("/");
-      });
-      // logIn returns the corresponding ParseUser object
-      if (loggedInUser !== null && loggedInUser !== undefined) {
-        console.log(loggedInUser);
-        // router.push("/");
-        return true;
-      }
+      await callParseLogin(formLogin.username, formLogin.password)
+        // Save data and connect to db
+        .then(async (loggedInUser) => {
+          if (loggedInUser.code === undefined) {
+            Cookies.set('sessionTokenCurrentUser', loggedInUser.sessionToken);
+            await router.push("/");
+            return;
+          }
+          throw new Error(loggedInUser.error);
+        })
+        // Render And show error
+        .catch((error) => {
+          console.log(error.message);
+        });
+
     } catch (error) {
       // Error can be caused by wrong parameters or lack of Internet connection
       console.log(`Error! ${error.message}`);
@@ -87,8 +93,8 @@ export default function Login() {
                 className="relative block w-full appearance-none rounded-none rounded-t-md border border-gray-300 px-3 py-2 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
                 placeholder="username"
                 type="username"
-                // id="email-address"
-                // autoComplete="email"
+              // id="email-address"
+              // autoComplete="email"
               />
             </div>
             <div>

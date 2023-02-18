@@ -5,7 +5,7 @@ const RightSideBar = () => {
   return (
     <div className="w-5/12">
       <div className="border-t-2 overflow-y-auto flex flex-col justify-between">
-        <Message />
+        {/* <Message /> */}
       </div>
     </div>
   );

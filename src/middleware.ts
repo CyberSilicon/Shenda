@@ -1,6 +1,7 @@
 
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
+import { getSessionOfCurrentUser } from './lib/api';
 // import Parse from "./services/parse";
 // import { getSessionOfCurrentUser } from './lib/api';
 
@@ -8,13 +9,11 @@ import type { NextRequest } from 'next/server'
 export async function middleware(request: NextRequest) {
 
   try {
-    // const token = request.cookies.get('sessionTokenCurrentUser')?.value
-    // const session = await getSessionOfCurrentUser(token);
+    const token = request.cookies.get('sessionTokenCurrentUser')?.value;
+    const session = await getSessionOfCurrentUser(token);
 
-    // const currentUser = await Parse.User.currentAsync();
-
-    if (request.nextUrl.pathname.startsWith('/register')) {
-        return NextResponse.redirect(new URL('/login', request.url))
+    if (request.nextUrl.pathname.endsWith('/') && session.code !== undefined) {
+      return NextResponse.redirect(new URL('/login', request.url))
     }
   } catch (err) {
     console.log("the middlware does not working: " + err.message)

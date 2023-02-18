@@ -3,6 +3,8 @@ import HomePage from "../components/HomePage";
 
 import { useCallback, useEffect, useState } from "react";
 import Parse from "../services/parse";
+import Cookies from "js-cookie";
+import { callParseSession } from "../lib/api";
 // import LayoutPage from "../components/LayoutPage";
 // import { Inter } from "@next/font/google";
 // const inter = Inter({ subsets: ["latin"] });
@@ -13,10 +15,17 @@ export default function Home() {
   // Function that will return current user and also update current username
   const getCurrentUser = useCallback(async () => {
     try {
-      // Update state variable holding current user
-      const session = await Parse.User.current();
-      // console.log("session is: " + session);
-      setCurrentUser(session);
+
+      const token = Cookies.get('sessionTokenCurrentUser');
+
+      const sessions = await callParseSession(token);
+
+      if (sessions.code === undefined) {
+        setCurrentUser(sessions);
+        console.log(sessions);
+        return;
+      }
+      setCurrentUser([]);
     } catch (e) {
       console.log("ERROR!", e.message);
     }

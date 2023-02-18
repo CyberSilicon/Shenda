@@ -8,17 +8,24 @@ import LogoutRoundedIcon from "@mui/icons-material/LogoutRounded";
 import Parse from "../services/parse";
 import Link from "next/link";
 import Image from "next/image";
-import { Router } from "next/router";
+import { useRouter } from "next/router";
+import Cookies from "js-cookie";
 
-const doUserLogOut = async () => {
-  try {
-    await Parse.User.logOut();
-  } catch (error) {
-    console.log(error.message);
-  }
-};
 
 const LeftSidebar = () => {
+
+  const navigate = useRouter()
+
+  const doUserLogOut = async () => {
+    try {
+      await Parse.User.logOut();
+      Cookies.remove('sessionTokenCurrentUser');
+      navigate.push('/login');
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
+
   return (
     <div className="flex top-0 left-0">
       <div className="flex flex-col justify-between items-center w-16 m-1 p-1">
