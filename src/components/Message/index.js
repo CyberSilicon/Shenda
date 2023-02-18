@@ -1,13 +1,10 @@
-import { useState, useRef, useEffect, useCallback } from "react";
+import { useState, useRef, useEffect, useCallback, useMemo } from "react";
 import styles from "../../styles/Home.module.css";
 import Parse from "../../services/parse";
-import { useRouter } from "next/router";
 import { client } from "../../config/LiveQueryClient";
 import _ from "lodash";
-// import { callParseSession } from "../../lib/api";
-// import Cookies from "js-cookie";
-
-// import { encodeParseQuery, useParseQuery } from "@parse/react-ssr";
+import { useRecoilValue } from "recoil";
+import { currentUserStore } from "../../store/atoms/currentUserStore";
 
 export default function Auth() {
   const [inputMessage, setInputMessage] = useState("");
@@ -15,16 +12,17 @@ export default function Auth() {
 
   const listRef = useChatScroll(message);
 
-  const handleSubmitMessage = async (e) => {
-    e.preventDefault();
+  const { uuid, username } = useRecoilValue(currentUserStore);
+
+  const handleSubmitMessage = async () => {
     const Message = Parse.Object.extend("Message");
     const newMessage = new Message();
-    newMessage.save({
+    const ss = newMessage.save({
       content: inputMessage,
-      senderName: Parse.User.current().get("username"),
-      senderId: Parse.User.current().id,
+      senderName: username,
+      senderId: uuid,
     });
-
+    console.log(ss);
     setInputMessage("");
 
     const el = document.getElementById("chat-feed");
@@ -51,7 +49,7 @@ export default function Auth() {
     subscription.on(
       "create",
       async (m) => {
-        setMessage((message) => message.concat([m]));
+        setMessage((message) => message.concat(m));
       },
       []
     );
@@ -74,23 +72,24 @@ export default function Auth() {
     return ref;
   }
 
-  const router = useRouter();
-  useEffect(() => {
-    async function checkUser() {
-      const currentUser = await Parse.User.currentAsync();
-      if (!currentUser) {
-        router.push("/");
-      }
-    }
-    checkUser();
-  }, []);
+  const handleupdateInput = useCallback(
+    (e) => {
+      setInputMessage(e.currentTarget.value);
+    },
+    [inputMessage]
+  );
 
-  const handleupdateInput = (e) => {
-    setInputMessage(e.currentTarget.value);
+  // console.log(uuid);
+  const messageClassName = (id) => {
+    return id.toString() === uuid.toString() ? styles.myMessage : null;
   };
 
-  const messageClassName = (id) =>
-    id === Parse.User.current().id ? styles.myMessage : null;
+  const handleSendMessageWithKey = (e) => {
+    if (inputMessage.trim().length > 0) {
+      e.key === "Enter" && handleSubmitMessage();
+    }
+  };
+
   return (
     <div className={styles.container}>
       <div
@@ -101,7 +100,8 @@ export default function Auth() {
       </div>
       <div className={styles.messagesContainer}>
         <ul id="chat-feed" ref={listRef}>
-          {message &&
+          {uuid !== undefined &&
+            message &&
             message.map((msg) => (
               <div
                 key={msg.id}
@@ -118,17 +118,23 @@ export default function Auth() {
         </ul>
       </div>
       <div className="p-1 bg-transparent">
-        <form
-          onSubmit={handleSubmitMessage}
-          className={styles.actionsContainer}
-        >
+        <div className={styles.actionsContainer}>
           <input
+            onKeyUp={(e) => handleSendMessageWithKey(e)}
             placeholder="Enter your message..."
             value={inputMessage}
             onChange={handleupdateInput}
           />
-          <button className="text-pink-900 text-lg">Send</button>
-        </form>
+          <button
+            disabled={inputMessage.trim().length <= 0}
+            className="text-slate-900 font-semibold text-lg disabled:text-slate-400"
+            onClick={
+              inputMessage.trim().length > 0 ? handleSubmitMessage : null
+            }
+          >
+            Send
+          </button>
+        </div>
       </div>
     </div>
   );
