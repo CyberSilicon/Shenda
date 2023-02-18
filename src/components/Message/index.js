@@ -1,24 +1,17 @@
-import {
-  useLayoutEffect,
-  useState,
-  useRef,
-  useEffect,
-  useCallback,
-} from "react";
+import { useState, useRef, useEffect, useCallback } from "react";
 import styles from "../../styles/Home.module.css";
 import Parse from "../../services/parse";
 import { useRouter } from "next/router";
 import { client } from "../../config/LiveQueryClient";
 import _ from "lodash";
-import { callParseSession } from "../../lib/api";
-import Cookies from "js-cookie";
+// import { callParseSession } from "../../lib/api";
+// import Cookies from "js-cookie";
 
 // import { encodeParseQuery, useParseQuery } from "@parse/react-ssr";
 
 export default function Auth() {
   const [inputMessage, setInputMessage] = useState("");
   const [message, setMessage] = useState("");
-  // const { results: messages } = useParseQuery(parseQuery);
 
   const listRef = useChatScroll(message);
 
@@ -40,11 +33,6 @@ export default function Auth() {
     }
   };
 
-  // const order = (messages) => {
-  //   return messages.sort((a, b) => {
-  //     return a.get("createdAt") - b.get("createdAt");
-  //   });
-  // };
   const handleGetMessage = useCallback(async () => {
     const parseQuery = new Parse.Query("Message");
     parseQuery.ascending("createdAt");
@@ -60,22 +48,13 @@ export default function Auth() {
 
     let subscription = await client.subscribe(parseQuery);
 
-    // subscription.on("open", (msgs) => {
-    // setMessage(msgs);
-    // });
-    const newArr = _.cloneDeep(message);
-    const dd = [...newArr];
-
     subscription.on(
       "create",
       async (m) => {
-        setMessage((dd) => dd.concat([m]));
-        // setMessage(newArr, m);
+        setMessage((message) => message.concat([m]));
       },
       []
     );
-    // return () => subscription.unsubscribe();
-    // parseQuery.greaterThanOrEqualTo("createdAt", new Date());
 
     return true;
   }, [message, setMessage]);
@@ -110,15 +89,14 @@ export default function Auth() {
     setInputMessage(e.currentTarget.value);
   };
 
-  const messageClassName = async (id) =>
-    id === await callParseSession(Cookies.get('sessionTokenCurrentUser')).objectId ? styles.myMessage : null;
-
+  const messageClassName = (id) =>
+    id === Parse.User.current().id ? styles.myMessage : null;
   return (
     <div className={styles.container}>
       <div className={styles.messagesContainer}>
         <ul id="chat-feed" ref={listRef}>
           {message &&
-            message.map((msg, id) => (
+            message.map((msg) => (
               <div
                 key={msg.id}
                 className={messageClassName(msg.get("senderId"))}

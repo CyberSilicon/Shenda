@@ -2,8 +2,6 @@
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
 import { getSessionOfCurrentUser } from './lib/api';
-// import Parse from "./services/parse";
-// import { getSessionOfCurrentUser } from './lib/api';
 
 // Call our authentication function to check the request
 export async function middleware(request: NextRequest) {
@@ -19,11 +17,4 @@ export async function middleware(request: NextRequest) {
     console.log("the middlware does not working: " + err.message)
   }
 }
-      // if (request.nextUrl.pathname.startsWith('/register')) {
-      //   return NextResponse.redirect(new URL('/login', request.url))
-      // }
-
-// export const config = {
-//   matcher: ['/'],  
-// }
-
+     
