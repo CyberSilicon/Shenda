@@ -1,12 +1,13 @@
 .container {
   display: flex;
   flex: 1;
-  height: 100vh;
+  /* height: screen; */
   flex-direction: column;
 }
 
 .messagesContainer {
-  height: calc(100vh - 10vh);
+  /* background-color: #4848ff; */
+  height: calc(100vh - 12vh);
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
@@ -15,37 +16,45 @@
 .messagesContainer ul {
   overflow-y: auto;
   margin-bottom: 5px;
-  padding: 0 40px;
+  padding: 0 25px;
 }
 .messagesContainer ul li {
   list-style: none;
   background: #d1d1ff;
-  display: block;
+  display: flex;
   margin-top: 10px;
-  border-radius: 8px;
+  border-radius: 20px;
   padding: 5px 10px;
   inline-size: fit-content;
+
 }
 .messagesContainer ul li.myMessage {
   list-style: none;
-  background: #d4ffd1;
-  display: block;
+  background: rgb(247, 247, 247);
+  display: flex;
   margin-top: 10px;
-  border-radius: 8px;
+  border-radius: 20px;
   padding: 5px 10px;
   inline-size: fit-content;
+  flex-direction: row-reverse;
 }
 .messagesContainer ul li span {
   color: #4848ff;
   font-size: small;
   display: flex;
   justify-content: flex-start;  
+  align-self: center;
+  font-weight: 700;
+  padding-right: 10px;
 }
 .messagesContainer ul li span.myMessage {
-  color: #318e2b;
-  font-size: small;
-  display: flex;
-  justify-content: flex-end;
+  /* color: #318e2b;
+  font-size: small; */
+  display: none;
+  /* justify-content: flex-end;
+  align-self: center;
+  font-weight: 700;
+  padding-left: 10px; */
 }
 
 .messagesContainer div {
@@ -79,7 +88,7 @@
 }
 
 .actionsContainer input {
-  flex: 8;
+  flex: 1;
   word-break: break-word;
   margin-right: 10px;
   outline: none;
@@ -87,5 +96,5 @@
   border-right: 1px solid lightgray;
 }
 .actionsContainer textarea {
-  flex: 8;
+  flex: 1;
 }
