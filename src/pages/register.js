@@ -19,10 +19,10 @@ export default function Login() {
       const createdUser = await Parse.User.signUp(
         username,
         password,
-        email,
+        { email },
         undefined
       );
-      console.log(username, password, email, createdUser);
+      // console.log(username, password, email, createdUser);
       // alert(`Success! ${createdUser.getUsername()} was successfully created!`);
       return true;
     } catch (error) {

@@ -10,6 +10,8 @@ import Parse from "../../services/parse";
 import { useRouter } from "next/router";
 import { client } from "../../config/LiveQueryClient";
 import _ from "lodash";
+import { callParseSession } from "../../lib/api";
+import Cookies from "js-cookie";
 
 // import { encodeParseQuery, useParseQuery } from "@parse/react-ssr";
 
@@ -108,8 +110,8 @@ export default function Auth() {
     setInputMessage(e.currentTarget.value);
   };
 
-  const messageClassName = (id) =>
-    id === Parse.User.current().id ? styles.myMessage : null;
+  const messageClassName = async (id) =>
+    id === await callParseSession(Cookies.get('sessionTokenCurrentUser')).objectId ? styles.myMessage : null;
 
   return (
     <div className={styles.container}>
