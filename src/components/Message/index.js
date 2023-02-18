@@ -93,6 +93,12 @@ export default function Auth() {
     id === Parse.User.current().id ? styles.myMessage : null;
   return (
     <div className={styles.container}>
+      <div
+        className="h-auto border-b-2 p-3 border-b-gray-200 top-0 fixed font-bold backdrop-blur-md
+ w-full"
+      >
+        Discussions
+      </div>
       <div className={styles.messagesContainer}>
         <ul id="chat-feed" ref={listRef}>
           {message &&
@@ -103,7 +109,7 @@ export default function Auth() {
               >
                 <li className={messageClassName(msg.get("senderId"))}>
                   <span className={messageClassName(msg.get("senderId"))}>
-                    {msg.get("senderName")}
+                    {msg.get("senderName")} ~
                   </span>
                   <p>{msg.get("content")}</p>
                 </li>
