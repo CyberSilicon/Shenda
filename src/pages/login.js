@@ -6,7 +6,7 @@ import Link from "next/link";
 import React, { useCallback, useState } from "react";
 import logo from "../../public/geologo.png";
 import { useRouter } from "next/router";
-import { currentUserActions } from "../store/actions/currentUserActions";
+import { useCurrentUserActions } from "../store/actions/useCurrentUserActions";
 // import { callParseLogin } from "../lib/api";
 // import Cookies from "js-cookie";
 
@@ -18,7 +18,7 @@ export default function Login() {
   });
 
   //...
-  const useCurrentUser = currentUserActions();
+  const useCurrentUser = useCurrentUserActions();
 
   const ChangeValueInput = useCallback(
     (e) => {
