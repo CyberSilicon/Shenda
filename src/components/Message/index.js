@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect, useCallback, useMemo } from "react";
+import { useState, useRef, useEffect, useCallback } from "react";
 import styles from "../../styles/Home.module.css";
 import Parse from "../../services/parse";
 import { client } from "../../config/LiveQueryClient";

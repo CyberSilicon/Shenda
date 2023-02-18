@@ -4,7 +4,7 @@ import Cookies from "js-cookie";
 import { useSetRecoilState } from "recoil";
 import { currentUserStore } from "../atoms/currentUserStore";
 
-export async function currentUserActions() {
+export async function useCurrentUserActions() {
   const setAuth = useSetRecoilState(currentUserStore);
   return {
     login,
