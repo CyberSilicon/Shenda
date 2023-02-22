@@ -3,10 +3,8 @@ import Message from "./Message";
 
 const RightSideBar = () => {
   return (
-    <div className="w-5/12">
-      <div className="border-t-2 overflow-y-auto flex flex-col justify-between">
-        <Message />
-      </div>
+    <div className="flex flex-1 flex-col justify-between border-t-2 overflow-y-auto">
+      <Message />
     </div>
   );
 };
