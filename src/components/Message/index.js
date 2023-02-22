@@ -6,66 +6,80 @@ import _ from "lodash";
 import { useRecoilValue } from "recoil";
 import { currentUserStore } from "../../store/atoms/currentUserStore";
 
-export default function Auth() {
+export default function Message() {
   const [inputMessage, setInputMessage] = useState("");
   const [message, setMessage] = useState("");
 
+  // Get a reference to the message container
   const listRef = useChatScroll(message);
+
+  // Get current user data from Recoil
 
   const { uuid, username } = useRecoilValue(currentUserStore);
 
   const handleSubmitMessage = async () => {
+    // Create a new Parse object for the message
+
     const Message = Parse.Object.extend("Message");
     const newMessage = new Message();
-    const ss = newMessage
-      .save({
-        content: inputMessage,
-        senderName: username,
-        senderId: uuid,
-      })
-      .then(() => {
-        // Play sound for sent messages
-        const sendSound = new Audio("message-notification.mp3");
-        sendSound.play();
-      });
+    // Save the message with the sender's information
+
+    newMessage.save({
+      content: inputMessage,
+      senderName: username,
+      senderId: uuid,
+    });
     setInputMessage("");
 
+    // Scroll to the bottom of the message container
     const el = document.getElementById("chat-feed");
     if (el) {
       el.scrollTop = el.scrollHeight;
     }
   };
 
+  // Handle getting all messages from Parse
+
   const handleGetMessage = useCallback(async () => {
     const parseQuery = new Parse.Query("Message");
     parseQuery.ascending("createdAt");
-    const resultQuery = await parseQuery.find();
 
+    // Execute the Parse query and set the state variable
+    const resultQuery = await parseQuery.find();
     setMessage(resultQuery);
-    return () => {
-      subscription.unsubscribe();
-    };
+    return true;
   }, []);
 
+  // Handle subscribing to live messages using Parse LiveQuery
   const handleGetLiveMessage = useCallback(async () => {
     const parseQuery = new Parse.Query("Message");
     parseQuery.ascending("createdAt");
 
+    const sendSoundMsg = new Audio("send-message.mp3");
+    const receiveSoundMsg = new Audio("message-notification.mp3");
+
+    // Subscribe to the Parse LiveQuery and set up event listeners for new messages
     let subscription = await client.subscribe(parseQuery);
 
-    const sendSoundMsg = new Audio("send-message.mp3");
     subscription.on(
       "create",
       async (m) => {
+        // Update the state variable with the new message
         setMessage((message) => message.concat(m));
+        // console.log(m.get("senderId") + " and " + uuid);
 
-        // Play sound for incoming messages
+        // Play a sound if the message is not from the current user
+        if (m.get("senderId") !== uuid) {
+          receiveSoundMsg.play();
+        }
         sendSoundMsg.play();
       },
       []
     );
 
-    return true;
+    return () => {
+      client.unsubscribe(parseQuery);
+    };
   }, [message, setMessage]);
 
   useEffect(() => {
@@ -73,6 +87,7 @@ export default function Auth() {
     handleGetLiveMessage();
   }, []);
 
+  // Custom hook to scroll to the bottom of the message container
   function useChatScroll(dep) {
     const ref = useRef();
     useEffect(() => {
@@ -90,6 +105,7 @@ export default function Auth() {
     [inputMessage]
   );
 
+  // Determine the class name for a message based on the sender's ID
   const messageClassName = (id) => {
     return id === uuid ? styles.myMessage : null;
   };
@@ -102,10 +118,7 @@ export default function Auth() {
 
   return (
     <div className={styles.container}>
-      <div
-        className="h-auto border-b-2 p-3 border-b-gray-200 top-0 fixed font-bold backdrop-blur-md
- w-full"
-      >
+      <div className="h-auto border-b-2 p-3 border-b-gray-200 top-0 fixed font-bold backdrop-blur-md w-full">
         Discussions
       </div>
       <div className={styles.messagesContainer}>
