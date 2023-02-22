@@ -51,7 +51,6 @@ export async function useCurrentUserActions() {
   }
 
   async function getSession() {
-    console.log("get session test ");
     setTimeout(async () => {
       try {
         const cookie = Cookies.get("sessionTokenCurrentUser");

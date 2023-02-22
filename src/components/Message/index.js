@@ -17,12 +17,17 @@ export default function Auth() {
   const handleSubmitMessage = async () => {
     const Message = Parse.Object.extend("Message");
     const newMessage = new Message();
-    const ss = newMessage.save({
-      content: inputMessage,
-      senderName: username,
-      senderId: uuid,
-    });
-    console.log(ss);
+    const ss = newMessage
+      .save({
+        content: inputMessage,
+        senderName: username,
+        senderId: uuid,
+      })
+      .then(() => {
+        // Play sound for sent messages
+        const sendSound = new Audio("message-notification.mp3");
+        sendSound.play();
+      });
     setInputMessage("");
 
     const el = document.getElementById("chat-feed");
@@ -37,7 +42,9 @@ export default function Auth() {
     const resultQuery = await parseQuery.find();
 
     setMessage(resultQuery);
-    return true;
+    return () => {
+      subscription.unsubscribe();
+    };
   }, []);
 
   const handleGetLiveMessage = useCallback(async () => {
@@ -46,10 +53,14 @@ export default function Auth() {
 
     let subscription = await client.subscribe(parseQuery);
 
+    const sendSoundMsg = new Audio("send-message.mp3");
     subscription.on(
       "create",
       async (m) => {
         setMessage((message) => message.concat(m));
+
+        // Play sound for incoming messages
+        sendSoundMsg.play();
       },
       []
     );
@@ -79,9 +90,8 @@ export default function Auth() {
     [inputMessage]
   );
 
-  // console.log(uuid);
   const messageClassName = (id) => {
-    return id.toString() === uuid.toString() ? styles.myMessage : null;
+    return id === uuid ? styles.myMessage : null;
   };
 
   const handleSendMessageWithKey = (e) => {
