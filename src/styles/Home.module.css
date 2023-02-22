@@ -26,7 +26,7 @@
   border-radius: 20px;
   padding: 5px 10px;
   inline-size: fit-content;
-
+  max-width: 70%;
 }
 .messagesContainer ul li.myMessage {
   list-style: none;
@@ -37,6 +37,7 @@
   padding: 5px 10px;
   inline-size: fit-content;
   flex-direction: row-reverse;
+  max-width: 70%;
 }
 .messagesContainer ul li span {
   color: #4848ff;
