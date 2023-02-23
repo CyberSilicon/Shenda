@@ -71,6 +71,7 @@ export default function Message() {
         // Play a sound if the message is not from the current user
         if (m.get("senderId") !== uuid) {
           receiveSoundMsg.play();
+          return;
         }
         sendSoundMsg.play();
       },
