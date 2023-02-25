@@ -14,7 +14,7 @@ export async function middleware(request: NextRequest) {
       return NextResponse.redirect(new URL('/login', request.url))
     }
   } catch (err) {
-    console.log("the middlware does not working: " + err.message)
+    console.log("Middlware error: " + err.message)
   }
 }
      

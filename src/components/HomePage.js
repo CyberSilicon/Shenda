@@ -5,12 +5,10 @@ import RightSideBar from "./RightSideBar";
 
 const HomePage = () => {
   return (
-    <div className="h-screen flex flex-row">
+    <div className="flex flex-row h-screen">
       <LeftSidebar />
-      {/* <div> */}
       <MainView />
       <RightSideBar />
-      {/* </div> */}
     </div>
   );
 };

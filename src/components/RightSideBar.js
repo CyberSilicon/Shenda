@@ -1,10 +1,10 @@
 import React from "react";
-import Message from "./Message";
+import Messages from "./Messages";
 
 const RightSideBar = () => {
   return (
-    <div className="flex flex-1 flex-col justify-between border-t-2 overflow-y-auto">
-      <Message />
+    <div className="flex flex-1 flex-col justify-between overflow-y-auto">
+      <Messages />
     </div>
   );
 };

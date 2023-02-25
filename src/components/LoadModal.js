@@ -5,8 +5,8 @@ const LoadModal = () => {
     <div>
       <div className="flex h-screen justify-center items-center bg-white z-50 fixed left-0 top-0 right-0">
         <div className="text-center">
-          <div className=" text-slate-900 text-4xl animate-pulse">
-            loading...
+          <div>
+            <img src="loading.gif" alt="Loading..." />
           </div>
         </div>
       </div>
