@@ -1,0 +1,53 @@
+.container {
+    @apply h-screen
+  }
+  
+  .messagesContainer {
+    @apply flex flex-col 
+  }
+  
+  .messagesContainer ul {
+    @apply flex-1 overflow-y-auto p-4
+  }
+  .messagesContainer ul li {
+    @apply bg-indigo-200 flex mt-1 rounded-lg p-1 px-2 max-w-[70%]
+    /* list-style: none; */
+    /* inline-size: fit-content; */
+  }
+  .messagesContainer ul li.myMessage {
+    @apply bg-gray-100 flex mt-1 flex-row-reverse rounded-lg p-1 px-2 max-w-[70%]
+    /* list-style: none; */
+    /* inline-size: fit-content; */
+  }
+  .messagesContainer ul li span {
+    @apply text-indigo-600 flex justify-start self-center font-bold pr-2 text-sm
+  }
+  .messagesContainer ul li span.myMessage {
+    @apply hidden
+  }
+  
+  .messagesContainer div {
+    @apply flex justify-start
+  }
+  
+  .messagesContainer div.myMessage {
+    @apply flex justify-end
+
+  }
+  
+  .messagesContainer ul li p {
+   @apply m-0 pt-2
+  }
+  .actionsContainer {
+    @apply items-center flex flex-row h-14 m-2 bg-gray-200 text-black rounded-lg px-3
+  }
+  .actionsContainer:hover {
+    @apply shadow-md
+  }
+  
+  .actionsContainer input {
+   @apply flex-1 py-4 px-4  bg-transparent outline-none border-r-2 border-r-slate-300 break-words 
+  }
+  /* .actionsContainer textarea {
+    @apply flex 
+  } */
