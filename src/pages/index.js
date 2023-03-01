@@ -1,7 +1,6 @@
 import Head from "next/head";
 import HomePage from "../components/HomePage";
 
-// import LayoutPage from "../components/LayoutPage";
 // import { Inter } from "@next/font/google";
 // const inter = Inter({ subsets: ["latin"] });
 
@@ -20,7 +19,3 @@ export default function Home() {
     </>
   );
 }
-
-// console.log("session aUTH: " + session.authenticated);
-// console.log("session getSessionToken: " + session.getSessionToken);
-// console.log("curentUSer: " + currentUser);
