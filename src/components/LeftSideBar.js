@@ -4,7 +4,7 @@ import HomeRoundedIcon from "@mui/icons-material/HomeRounded";
 import TagRoundedIcon from "@mui/icons-material/TagRounded";
 import PersonPinIcon from "@mui/icons-material/PersonPin";
 import LogoutRoundedIcon from "@mui/icons-material/LogoutRounded";
-import { Tooltip, Zoom } from "@mui/material";
+import { Avatar, Tooltip, Zoom } from "@mui/material";
 import { tooltipClasses } from "@mui/material";
 import { styled } from "@mui/material";
 
@@ -13,9 +13,13 @@ import Link from "next/link";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import Cookies from "js-cookie";
+import { useRecoilValue } from "recoil";
+import { currentUserStore } from "../store/atoms/currentUserStore";
 
 const LeftSidebar = () => {
   const navigate = useRouter();
+
+  const { attrs } = useRecoilValue(currentUserStore);
 
   const doUserLogOut = async () => {
     try {
@@ -28,7 +32,7 @@ const LeftSidebar = () => {
   };
 
   return (
-    <div className="flex top-0 left-0 h-screen ">
+    <div className="flex top-0 left-0 h-screen max-sm:hidden">
       <div className="flex flex-col justify-between items-center w-16 m-1 p-1">
         {/* The head section */}
         <div className="border-b-2 max-sm:hidden">
@@ -77,7 +81,7 @@ const LeftSidebar = () => {
           <div>
             <SideBarIcon
               iconToolTip="Profile"
-              icon={<PersonPinIcon fontSize="large" />}
+              icon={<Avatar src={attrs.avatar && attrs.avatar.url} />}
             />
           </div>
           <button onClick={doUserLogOut}>

@@ -1,7 +1,6 @@
 import React, { useState, useRef, useEffect, useCallback } from "react";
 import Parse from "../../services/parse";
 import { client } from "../../config/LiveQueryClient";
-// import _ from "lodash";
 import { useRecoilValue } from "recoil";
 import { currentUserStore } from "../../store/atoms/currentUserStore";
 
@@ -13,28 +12,34 @@ const Messages = () => {
   const listRef = useChatScroll(messages);
 
   // Get current user data from Recoil
-
-  const { uuid, username } = useRecoilValue(currentUserStore);
+  const { uuid, username, attrs } = useRecoilValue(currentUserStore);
 
   const handleSubmitMessage = async () => {
-    // Create a new Parse object for the message
+    try {
+      const newUser = new Parse.Query(Parse.User);
 
-    const Message = Parse.Object.extend("Message");
-    const newMessage = new Message();
-    // Save the message with the sender's information
+      newUser.equalTo("objectId", uuid);
+      const ParseUser = await newUser.find();
 
-    newMessage.save({
-      content: inputMessage,
-      senderName: username,
-      senderId: uuid,
-    });
+      const Message = Parse.Object.extend("Message");
+      const newMessage = new Message();
 
-    setInputMessage("");
+      // Save the message with the sender's information
+      await newMessage.save({
+        content: inputMessage,
+        senderName: username,
+        creator: ParseUser[0],
+      });
 
-    // Scroll to the bottom of the message container
-    const el = document.getElementById("chat-feed");
-    if (el) {
-      el.scrollTop = el.scrollHeight;
+      setInputMessage("");
+
+      // Scroll to the bottom of the message container
+      const el = document.getElementById("chat-feed");
+      if (el) {
+        el.scrollTop = el.scrollHeight;
+      }
+    } catch (e) {
+      console.log(e.message);
     }
   };
 
@@ -43,6 +48,7 @@ const Messages = () => {
   const handleGetMessage = useCallback(async () => {
     const parseQuery = new Parse.Query("Message");
     parseQuery.ascending("createdAt");
+    parseQuery.include("creator");
 
     // Execute the Parse query and set the state variable
     const resultQuery = await parseQuery.find();
@@ -122,7 +128,6 @@ const Messages = () => {
   //     setInputMessage("");
   //   }
   // };
-
   return (
     <div className="h-screen flex flex-col flex-auto">
       <div className="h-16 px-7 flex items-center justify-between border-b">
@@ -139,22 +144,36 @@ const Messages = () => {
             <div
               key={index}
               className={`${
-                message.get("senderId") === uuid
+                message.get("creator")?.id === uuid
                   ? "justify-end"
                   : "justify-start"
               } flex mb-1`}
             >
+              {message.get("creator")?.id !== uuid && (
+                <div>
+                  <span className="inline-block relative mr-2 self-center">
+                    <img
+                      className="h-8 w-8 rounded-full"
+                      src={attrs && attrs.avatar.url}
+                      alt="avatar"
+                    />
+                    {/* <span className="absolute bottom-0 right-0 block h-2.5 w-2.5 rounded-full ring-2 ring-white bg-green-400"></span> */}
+                  </span>
+                </div>
+              )}
               <div
                 className={`${
-                  message.get("senderId") === uuid
+                  message.get("creator")?.id === uuid
                     ? "bg-gray-100"
                     : "bg-indigo-200"
-                } rounded-lg py-2 px-3 max-w-3/4 flex flex-row items-center justify-center`}
+                } rounded-3xl py-2 px-3 max-w-3/4 flex flex-row items-center justify-center`}
               >
-                {message.get("senderId") !== uuid && (
-                  <span className="text-indigo-600 font-semibold text-sm">
-                    {message.get("senderName")} ~&nbsp;
-                  </span>
+                {message.get("creator")?.id !== uuid && (
+                  <div>
+                    <span className="text-indigo-600 font-semibold text-sm">
+                      {message.get("senderName")} ~&nbsp;
+                    </span>
+                  </div>
                 )}
                 <p>{message.get("content")}</p>
               </div>
