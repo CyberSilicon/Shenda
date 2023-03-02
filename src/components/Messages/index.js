@@ -154,7 +154,9 @@ const Messages = () => {
                   <span className="inline-block relative mr-2 self-center">
                     <img
                       className="h-8 w-8 rounded-full"
-                      src={attrs && attrs.avatar.url}
+                      src={
+                        message && message.get("creator").get("avatar").url()
+                      }
                       alt="avatar"
                     />
                     {/* <span className="absolute bottom-0 right-0 block h-2.5 w-2.5 rounded-full ring-2 ring-white bg-green-400"></span> */}
@@ -175,7 +177,7 @@ const Messages = () => {
                     </span>
                   </div>
                 )}
-                <p>{message.get("content")}</p>
+                <p>{message.get("content")} </p>
               </div>
             </div>
           ))}
@@ -187,7 +189,7 @@ const Messages = () => {
           placeholder="Enter your message..."
           value={inputMessage}
           onChange={handleupdateInput}
-          className="flex-1 bg-transparent outline-none border-r-2   py-2 px-4 mr-2"
+          className="flex-1 bg-transparent outline-none border-r-2 py-2 px-4 mr-2"
         />
         <button
           disabled={inputMessage.trim().length < 1}
