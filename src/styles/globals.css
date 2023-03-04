@@ -4,8 +4,8 @@
 
 @layer components {
     .sidebar-icon {
-        @apply relative flex items-center justify-center h-14 w-14 my-auto mx-auto shadow-sm cursor-pointer
-         hover:bg-indigo-900 text-indigo-900 hover:text-white 
+        @apply relative flex items-center justify-center h-14 w-14 my-auto mx-auto shadow-sm 
+        cursor-pointer hover:bg-indigo-900 text-indigo-900 hover:text-white 
         rounded-xl hover:rounded-3xl transition-all duration-300 ease-linear;
     }
     /* .sidebar-tooltip {

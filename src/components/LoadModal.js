@@ -12,12 +12,9 @@ const LoadModal = () => {
       </div>
       <div className="flex h-screen justify-center items-end z-50 fixed left-0 top-0 right-0">
         <div>
-          <h1 className="text-sm m-20 text-gray-400 font-bold">Welcome to</h1>
-        </div>
-      </div>
-      <div className="flex h-screen justify-center items-end z-50 fixed left-0 top-0 right-0">
-        <div>
-          <h1 className="font-bold text-2xl m-10">Shenda</h1>
+          <h1 className="text-base m-auto mb-10 text-slate-500 font-semibold">
+            Welcome to Shenda
+          </h1>
         </div>
       </div>
     </div>

@@ -1,14 +1,12 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-// react/no-unescaped-entities
 import Head from "next/head";
-import Image from "next/image";
 import Link from "next/link";
 import React, { useCallback, useState } from "react";
-import logo from "../../public/geologo.png";
 import { useRouter } from "next/router";
 import { useCurrentUserActions } from "../store/actions/useCurrentUserActions";
-// import { callParseLogin } from "../lib/api";
-// import Cookies from "js-cookie";
+// import logo from "../../public/geologo.png";
+
+// import { ToastContainer, toast } from "react-toastify";
+// import "react-toastify/dist/ReactToastify.css";
 
 export default function Login() {
   const [formLogin, setFormLogin] = useState({
@@ -32,32 +30,34 @@ export default function Login() {
   const doUserLogIn = useCallback(async () => {
     // Note that these values come from state variables that we've declared before
     try {
-      (await useCurrentUser).login(
+      const user = (await useCurrentUser).login(
         formLogin.username,
         formLogin.password,
         router,
         setFormLogin
       );
-      //   await callParseLogin(formLogin.username, formLogin.password)
-      //     // Save data and connect to db
-      //     .then(async (loggedInUser) => {
-      //       if (loggedInUser.code === undefined) {
-      //         Cookies.set("sessionTokenCurrentUser", loggedInUser.sessionToken);
-      //         await router.push("/");
-      //         return;
-      //       }
-      //       throw new Error(loggedInUser.error);
-      //     })
-      //     // Render And show error
-      //     .catch((error) => {
-      //       console.log(error.message);
-      //     });
+      if (user) {
+        // toastSuccessLogin(); // show success message
+        await router.push("/");
+        return;
+      }
     } catch (error) {
-      // Error can be caused by wrong parameters or lack of Internet connection
+      // toastErrorLogin(error.message); // show error message
       console.log(`Error! ${error.message}`);
       return false;
     }
   }, [formLogin]);
+
+  // const toastErrorLogin = (err) =>
+  //   toast.error(err || "Invalid username or password", {
+  //     position: "top-right",
+  //     autoClose: 5000,
+  //     hideProgressBar: false,
+  //     closeOnClick: true,
+  //     pauseOnHover: true,
+  //     draggable: true,
+  //     progress: undefined,
+  //   });
 
   return (
     <>
@@ -66,15 +66,13 @@ export default function Login() {
         <meta name="keywords" content="login" />
         meta
       </Head>
-      <div className="flex min-h-full items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+      <div className="flex min-h-full h-screen items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
         <div className="w-full max-w-md space-y-8">
           <div>
-            <Image
-              src={logo}
-              className="mx-auto w-auto"
+            <img
+              src="geologo.png"
+              className="mx-auto w-auto h-28"
               alt="Shenda logo"
-              height={160}
-              width={110}
             />
             <h2 className="mt-6 text-center text-3xl font-bold tracking-tight text-gray-900">
               Sign in to your account
@@ -152,13 +150,42 @@ export default function Login() {
 
           <div>
             <button
-              onClick={() => doUserLogIn()}
+              onClick={() => {
+                doUserLogIn();
+                setFormLogin({ ...formLogin, loading: true });
+              }}
+              disabled={formLogin.loading}
               className="group relative flex w-full justify-center rounded-md border border-transparent bg-zinc-800 py-2 px-4 text-sm font-medium text-white hover:bg-zinc-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
             >
-              Log in
+              {formLogin.loading ? "Loading" : "Log in"}
+              {formLogin.loading && (
+                <svg
+                  class="animate-spin -mr-1 ml-3 h-5 w-5 text-white"
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 24 24"
+                >
+                  <circle
+                    class="opacity-25"
+                    cx="12"
+                    cy="12"
+                    r="10"
+                    stroke="currentColor"
+                    stroke-width="4"
+                  />
+                  <path
+                    d="M12 22C17.5228 22 22 17.5228 22 12H19C19 15.866 15.866 19 12 19V22Z"
+                    class="opacity-75"
+                    fill="currentColor"
+                  ></path>
+                  <path
+                    d="M2 12C2 6.47715 6.47715 2 12 2V5C8.13401 5 5 8.13401 5 12H2Z"
+                    class="opacity-75"
+                    fill="currentColor"
+                  ></path>
+                </svg>
+              )}
             </button>
           </div>
-          {/* </form> */}
         </div>
       </div>
     </>
