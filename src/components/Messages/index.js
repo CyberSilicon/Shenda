@@ -154,7 +154,7 @@ const Messages = () => {
               } flex flex-row mb-1 `}
             >
               {message.get("creator")?.id !== uuid && (
-                <span className=" inline-block relative mr-2 self-center">
+                <span className=" inline-block relative mr-2 self-start">
                   <img
                     className="flex h-8 w-8 rounded-full"
                     src={
@@ -171,11 +171,11 @@ const Messages = () => {
                   message.get("creator")?.id === uuid
                     ? "bg-gray-100"
                     : "bg-indigo-200"
-                }  rounded-3xl py-1 px-3 max-w-[75%] items-center justify-center  flex flex-row`}
+                }  rounded-2xl py-1 px-3 max-w-[75%] items-start justify-start flex flex-row`}
               >
                 {message.get("creator")?.id !== uuid && (
                   <span className="text-indigo-600 font-semibold text-sm">
-                    <div className="flex flex-row">
+                    <div className="flex flex-row items-start justify-start py-1">
                       <p>{message.get("senderName")}</p>
                       <p>~&nbsp;</p>
                       {"  "}

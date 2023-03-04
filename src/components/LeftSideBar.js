@@ -48,7 +48,7 @@ const LeftSidebar = () => {
           <img
             src={"/geologo.png"}
             alt="Shenda Logo"
-            className="sidebar-icon mb-2 p-2"
+            className="sidebar-icon mb-2 p-1"
           />
         </div>
         {/* The main section */}
