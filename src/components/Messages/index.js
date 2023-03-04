@@ -8,11 +8,15 @@ const Messages = () => {
   const [messages, setMessages] = useState([]);
   const [inputMessage, setInputMessage] = useState("");
 
+  const [showAnimation, setShowAnimation] = useState(false);
+  const [messageSent, setMessageSent] = useState(false);
+  // const [lastMessageRef, setLastMessageRef] = useState(null);
+
   // Get a reference to the message container
   const listRef = useChatScroll(messages);
 
   // Get current user data from Recoil
-  const { uuid, username, attrs } = useRecoilValue(currentUserStore);
+  const { uuid, username } = useRecoilValue(currentUserStore);
 
   const handleSubmitMessage = async () => {
     try {
@@ -32,6 +36,7 @@ const Messages = () => {
       });
 
       setInputMessage("");
+      setMessageSent(true);
 
       // Scroll to the bottom of the message container
       const el = document.getElementById("chat-feed");
@@ -95,8 +100,21 @@ const Messages = () => {
     handleGetLiveMessage();
   }, []);
 
-  // Custom hook to scroll to the bottom of the message container
+  //*Animation on send msg
 
+  const messageRef = useRef(null);
+
+  useEffect(() => {
+    if (showAnimation && messageRef.current) {
+      messageRef.current.classList.add("message-animation");
+      setTimeout(() => {
+        messageRef.current.classList.remove("message-animation");
+        setShowAnimation(false);
+      }, 1000);
+    }
+  }, [showAnimation]);
+
+  // Custom hook to scroll to the bottom of the message container
   function useChatScroll() {
     const ref = useRef();
     useEffect(() => {
@@ -130,10 +148,10 @@ const Messages = () => {
   // };
   return (
     <div className="h-screen flex flex-col flex-auto">
-      <div className="h-16 px-7 flex items-center justify-between border-b">
+      <div className="h-16 px-7 flex items-center justify-between border-b shadow-sm">
         <h1 className="text-xl font-bold">Discussion</h1>
-        <button className="hover:text-indigo-800 py-2 px-4 rounded-sm">
-          Online users
+        <button className="hover:text-indigo-800 py-2 px-3 rounded-sm">
+          Actives users
         </button>
       </div>
 
@@ -142,42 +160,45 @@ const Messages = () => {
           messages &&
           messages.map((message, index) => (
             <div
+              ref={messageRef}
               key={index}
               className={`${
                 message.get("creator")?.id === uuid
                   ? "justify-end"
                   : "justify-start"
-              } flex mb-1`}
+              } flex flex-row mb-1 `}
+              onAnimationEnd={() => setMessageSent(false)}
             >
               {message.get("creator")?.id !== uuid && (
-                <div>
-                  <span className="inline-block relative mr-2 self-center">
-                    <img
-                      className="h-8 w-8 rounded-full"
-                      src={
-                        message && message.get("creator").get("avatar").url()
-                      }
-                      alt="avatar"
-                    />
-                    {/* <span className="absolute bottom-0 right-0 block h-2.5 w-2.5 rounded-full ring-2 ring-white bg-green-400"></span> */}
-                  </span>
-                </div>
+                <span className=" inline-block relative mr-2 self-center">
+                  <img
+                    className="flex h-8 w-8 rounded-full"
+                    src={
+                      message.get("creator").get("avatar") &&
+                      message.get("creator").get("avatar").url()
+                    }
+                    alt="avatar"
+                  />
+                  {/* <span className="absolute bottom-0 right-0 block h-2.5 w-2.5 rounded-full ring-2 ring-white bg-green-400"></span> */}
+                </span>
               )}
               <div
                 className={`${
                   message.get("creator")?.id === uuid
                     ? "bg-gray-100"
                     : "bg-indigo-200"
-                } rounded-3xl py-2 px-3 max-w-3/4 flex flex-row items-center justify-center`}
+                }  rounded-3xl py-1 px-3 max-w-[75%] items-center justify-center  flex flex-row`}
               >
                 {message.get("creator")?.id !== uuid && (
-                  <div>
-                    <span className="text-indigo-600 font-semibold text-sm">
-                      {message.get("senderName")} ~&nbsp;
-                    </span>
-                  </div>
+                  <span className="text-indigo-600 font-semibold text-sm">
+                    <div className="flex flex-row">
+                      <p>{message.get("senderName")}</p>
+                      <p>~&nbsp;</p>
+                      {"  "}
+                    </div>
+                  </span>
                 )}
-                <p>{message.get("content")} </p>
+                <p className="break-all">{message.get("content")} </p>
               </div>
             </div>
           ))}
@@ -189,11 +210,11 @@ const Messages = () => {
           placeholder="Enter your message..."
           value={inputMessage}
           onChange={handleupdateInput}
-          className="flex-1 bg-transparent outline-none border-r-2 py-2 px-4 mr-2"
+          className="max-w-[90%] flex-1 bg-transparent outline-none border-r-2 py-2 px-4 mr-2 break-words"
         />
         <button
           disabled={inputMessage.trim().length < 1}
-          className="py-2 px-2 rounded-md text-slate-900 font-semibold text-lg disabled:text-slate-400"
+          className="fixed right-2  py-2 px-2 rounded-md text-slate-900 font-semibold text-lg disabled:text-slate-400"
           onClick={inputMessage.trim().length > 0 ? handleSubmitMessage : null}
         >
           Send
