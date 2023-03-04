@@ -8,8 +8,6 @@ const Messages = () => {
   const [messages, setMessages] = useState([]);
   const [inputMessage, setInputMessage] = useState("");
 
-  const [showAnimation, setShowAnimation] = useState(false);
-  const [messageSent, setMessageSent] = useState(false);
   // const [lastMessageRef, setLastMessageRef] = useState(null);
 
   // Get a reference to the message container
@@ -102,18 +100,6 @@ const Messages = () => {
 
   //*Animation on send msg
 
-  const messageRef = useRef(null);
-
-  useEffect(() => {
-    if (showAnimation && messageRef.current) {
-      messageRef.current.classList.add("message-animation");
-      setTimeout(() => {
-        messageRef.current.classList.remove("message-animation");
-        setShowAnimation(false);
-      }, 1000);
-    }
-  }, [showAnimation]);
-
   // Custom hook to scroll to the bottom of the message container
   function useChatScroll() {
     const ref = useRef();
@@ -160,17 +146,15 @@ const Messages = () => {
           messages &&
           messages.map((message, index) => (
             <div
-              ref={messageRef}
               key={index}
               className={`${
                 message.get("creator")?.id === uuid
                   ? "justify-end"
                   : "justify-start"
               } flex flex-row mb-1 `}
-              onAnimationEnd={() => setMessageSent(false)}
             >
               {message.get("creator")?.id !== uuid && (
-                <span className=" inline-block relative mr-2 self-center">
+                <span className=" inline-block relative mr-2 self-start">
                   <img
                     className="flex h-8 w-8 rounded-full"
                     src={
@@ -187,11 +171,11 @@ const Messages = () => {
                   message.get("creator")?.id === uuid
                     ? "bg-gray-100"
                     : "bg-indigo-200"
-                }  rounded-3xl py-1 px-3 max-w-[75%] items-center justify-center  flex flex-row`}
+                }  rounded-2xl py-1 px-3 max-w-[75%] items-start justify-start flex flex-row`}
               >
                 {message.get("creator")?.id !== uuid && (
                   <span className="text-indigo-600 font-semibold text-sm">
-                    <div className="flex flex-row">
+                    <div className="flex flex-row items-start justify-start py-1">
                       <p>{message.get("senderName")}</p>
                       <p>~&nbsp;</p>
                       {"  "}
