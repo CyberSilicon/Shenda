@@ -8,8 +8,6 @@ const Messages = () => {
   const [messages, setMessages] = useState([]);
   const [inputMessage, setInputMessage] = useState("");
 
-  const [showAnimation, setShowAnimation] = useState(false);
-  const [messageSent, setMessageSent] = useState(false);
   // const [lastMessageRef, setLastMessageRef] = useState(null);
 
   // Get a reference to the message container
@@ -102,18 +100,6 @@ const Messages = () => {
 
   //*Animation on send msg
 
-  const messageRef = useRef(null);
-
-  useEffect(() => {
-    if (showAnimation && messageRef.current) {
-      messageRef.current.classList.add("message-animation");
-      setTimeout(() => {
-        messageRef.current.classList.remove("message-animation");
-        setShowAnimation(false);
-      }, 1000);
-    }
-  }, [showAnimation]);
-
   // Custom hook to scroll to the bottom of the message container
   function useChatScroll() {
     const ref = useRef();
@@ -160,14 +146,12 @@ const Messages = () => {
           messages &&
           messages.map((message, index) => (
             <div
-              ref={messageRef}
               key={index}
               className={`${
                 message.get("creator")?.id === uuid
                   ? "justify-end"
                   : "justify-start"
               } flex flex-row mb-1 `}
-              onAnimationEnd={() => setMessageSent(false)}
             >
               {message.get("creator")?.id !== uuid && (
                 <span className=" inline-block relative mr-2 self-center">
