@@ -31,10 +31,10 @@ const Messages = () => {
         content: inputMessage,
         senderName: username,
         creator: ParseUser[0],
+        // delivered: true,
       });
 
       setInputMessage("");
-      setMessageSent(true);
 
       // Scroll to the bottom of the message container
       const el = document.getElementById("chat-feed");
@@ -61,27 +61,26 @@ const Messages = () => {
 
   // Handle subscribing to live messages using Parse LiveQuery
   const handleGetLiveMessage = useCallback(async () => {
+    //*
     const parseQuery = new Parse.Query("Message");
     parseQuery.ascending("createdAt");
 
     // const sendSoundMsg = new Audio("send-message.mp3");
-    const receiveSoundMsg = new Audio("message-notification.mp3");
+    // const receiveSoundMsg = new Audio("message-notification.mp3");
 
     // Subscribe to the Parse LiveQuery and set up event listeners for new messages
     let subscription = await client.subscribe(parseQuery);
 
     subscription.on(
       "create",
-      async (m) => {
+      async (newMsg) => {
         // Update the state variable with the new message
+        setMessages((message) => message.concat(newMsg));
 
-        setMessages((message) => message.concat(m));
-        // receiveSoundMsg.play();
-
-        // if (m.get("senderId") !== uuid) {
-        //   console.log(m.get("senderId") + " and " + uuid);
-        //   return;
+        // if (uuid !== newMsg.get("creator"  )?.id && uuid ) {
+        //   return receiveSoundMsg.play();
         // }
+        // sendSoundMsg.play();
 
         // setMessages([...messages, { text: inputMessage, from: uuid }]);
       },
@@ -132,12 +131,16 @@ const Messages = () => {
   //     setInputMessage("");
   //   }
   // };
+
   return (
     <div className="h-screen flex flex-col flex-auto">
       <div className="h-16 px-7 flex items-center justify-between border-b shadow-sm">
         <h1 className="text-xl font-bold">Discussion</h1>
-        <button className="hover:text-indigo-800 py-2 px-3 rounded-sm">
-          Actives users
+        <button
+          className="hover:text-indigo-800 py-2 px-3 rounded-sm"
+          title="Active users"
+        >
+          Active users
         </button>
       </div>
 
@@ -171,8 +174,11 @@ const Messages = () => {
                   message.get("creator")?.id === uuid
                     ? "bg-gray-100"
                     : "bg-indigo-200"
-                }  rounded-2xl py-1 px-3 max-w-[75%] items-start justify-start flex flex-row`}
+                }  rounded-2xl py-1 px-2 max-w-[75%] items-start justify-start flex flex-row`}
               >
+                {/* <span className="text-xs">
+                    {message.get("delivered") ? "delivered " : "sent "}{" "}
+                  </span> */}
                 {message.get("creator")?.id !== uuid && (
                   <span className="text-indigo-600 font-semibold text-sm">
                     <div className="flex flex-row items-start justify-start py-1">
@@ -188,17 +194,18 @@ const Messages = () => {
           ))}
       </div>
 
-      <div className="h-16 bg-white px-4 flex items-center border">
+      <div className="h-16 bg-white px-2 flex flex-row items-center border">
         <input
           onKeyUp={(e) => handleSendMessageWithKey(e)}
           placeholder="Enter your message..."
           value={inputMessage}
           onChange={handleupdateInput}
-          className="max-w-[90%] flex-1 bg-transparent outline-none border-r-2 py-2 px-4 mr-2 break-words"
+          className=" flex-1 bg-transparent outline-none py-1 px-2 break-words"
         />
+        {/* <div className=" border-r border-slate-400 rounded-2xl m-2 h-8" /> */}
         <button
           disabled={inputMessage.trim().length < 1}
-          className="fixed right-2  py-2 px-2 rounded-md text-slate-900 font-semibold text-lg disabled:text-slate-400"
+          className="border-l-2 justify-center pl-4 pr-2  text-slate-900 font-semibold text-lg disabled:text-slate-400"
           onClick={inputMessage.trim().length > 0 ? handleSubmitMessage : null}
         >
           Send
