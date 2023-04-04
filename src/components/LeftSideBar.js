@@ -10,8 +10,6 @@ import { tooltipClasses } from "@mui/material";
 import { styled } from "@mui/material";
 
 import Parse from "../services/parse";
-import Link from "next/link";
-import Image from "next/image";
 import { useRouter } from "next/router";
 import Cookies from "js-cookie";
 import { useRecoilValue } from "recoil";
@@ -77,7 +75,7 @@ const LeftSidebar = () => {
         <div className="space-y-1 bottom-0 border-t-2 pt-1">
           <button onClick={handleToggle}>
             {isOpen && (
-              <div className="absolute z-10 left-16 mr-2 bottom-2 bg-white border rounded-md shadow-xl">
+              <div className="absolute z-10 left-16 mr-2 bottom-2 max-sm:bottom-0 bg-white border rounded-md shadow-xl">
                 <button className="block w-full px-4 py-2 text-left hover:bg-gray-100">
                   Account
                 </button>
@@ -89,6 +87,7 @@ const LeftSidebar = () => {
                 </button>
               </div>
             )}
+            {/* //! update src path */}
             <SideBarIcon
               icon={<Avatar src={attrs.avatar && attrs.avatar.url} />}
             />

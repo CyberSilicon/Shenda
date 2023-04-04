@@ -1,4 +1,33 @@
-.message-animation {
+/* .message-container {
+  display: flex;
+  flex-direction: column;
+  margin: 0.5rem;
+  padding: 0.5rem;
+  border-radius: 0.4rem;
+}
+
+.message-container.last-in-group {
+  border-bottom-right-radius: 0;
+  border-bottom-left-radius: 0;
+}
+
+.message-container.first-in-group {
+  border-top-right-radius: 0;
+  border-top-left-radius: 0;
+}
+
+.message-container.sent {
+  background-color: #88eaf7;
+  align-self: flex-end;
+}
+
+.message-container.received {
+  background-color: #c2c1bf;
+  align-self: flex-start;
+} */
+
+
+/* .message-animation {
   animation: jump 0.5s ease-out;
 }
 
@@ -12,7 +41,10 @@
   100% {
     transform: translateY(0);
   }
-}/* .animate-bounce {
+}
+ */
+
+/* .animate-bounce {
   animation: bounce 1s;
 }
 
