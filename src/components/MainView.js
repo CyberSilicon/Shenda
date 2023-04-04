@@ -8,7 +8,7 @@ const MainView = () => {
       {/* <Map /> */}
 
       <div className="m-8 div-2 text-xl font-mono flex flex-1 flex-col h-full text-center justify-center items-center">
-        <p className=" text-indigo-900 m-6 p-4 font-mono font-semibold text-3xl self-center hover:animate-pulse">
+        <p className="text-indigo-900 m-6 p-4 font-mono font-semibold text-3xl self-center hover:animate-pulse">
           Welcome to Shenda
         </p>
         <TypingAnimation
