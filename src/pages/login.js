@@ -5,8 +5,6 @@ import { useRouter } from "next/router";
 import { useCurrentUserActions } from "../store/actions/useCurrentUserActions";
 // import logo from "../../public/geologo.png";
 
-// import { ToastContainer, toast } from "react-toastify";
-// import "react-toastify/dist/ReactToastify.css";
 
 export default function Login() {
   const [formLogin, setFormLogin] = useState({
@@ -36,7 +34,7 @@ export default function Login() {
         router,
         setFormLogin
       );
-      if (user) {
+      if (user !== null && user !== undefined) {
         await router.push("/");
         return true;
       }
