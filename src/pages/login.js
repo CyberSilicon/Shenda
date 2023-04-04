@@ -36,9 +36,9 @@ export default function Login() {
         router,
         setFormLogin
       );
-      if (user) {
+      if (user !== null && user !== undefined) {
         await router.push("/");
-        // return;
+        return true;
       }
     } catch (error) {
       // toastErrorLogin(error.message); // show error message
