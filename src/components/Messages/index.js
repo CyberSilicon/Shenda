@@ -4,6 +4,8 @@ import { client } from "../../config/LiveQueryClient";
 import { useRecoilValue } from "recoil";
 import { currentUserStore } from "../../store/atoms/currentUserStore";
 
+// import "../../styles/Message.module.css";
+
 const Messages = () => {
   const [messages, setMessages] = useState([]);
   const [inputMessage, setInputMessage] = useState("");
@@ -70,7 +72,6 @@ const Messages = () => {
 
     // Subscribe to the Parse LiveQuery and set up event listeners for new messages
     let subscription = await client.subscribe(parseQuery);
-
     subscription.on(
       "create",
       async (newMsg) => {
@@ -132,6 +133,19 @@ const Messages = () => {
   //   }
   // };
 
+  // function parseMessageToChatMessage(parseMessage) {
+  //   return {
+  //     id: parseMessage.id,
+  //     message: parseMessage.get("content"),
+  //     senderName: parseMessage.get("senderName"),
+  //     timestamp: parseMessage.createdAt.toLocaleTimeString().toString(),
+  //     avatar: parseMessage.get("creator").get("avatar")
+  //       ? parseMessage.get("creator").get("avatar").url()
+  //       : undefined,
+  //     // Add any other properties that the ChatMessage component needs here
+  //   };
+  // }
+
   return (
     <div className="h-screen flex flex-col flex-auto">
       <div className="h-16 px-7 flex items-center justify-between border-b shadow-sm">
@@ -154,41 +168,48 @@ const Messages = () => {
                 message.get("creator")?.id === uuid
                   ? "justify-end"
                   : "justify-start"
-              } flex flex-row mb-1 `}
+              } flex flex-row mb-1`}
             >
-              {message.get("creator")?.id !== uuid && (
-                <span className=" inline-block relative mr-2 self-start">
-                  <img
-                    className="flex h-8 w-8 rounded-full"
-                    src={
-                      message.get("creator").get("avatar") &&
-                      message.get("creator").get("avatar").url()
-                    }
-                    alt="avatar"
-                  />
-                  {/* <span className="absolute bottom-0 right-0 block h-2.5 w-2.5 rounded-full ring-2 ring-white bg-green-400"></span> */}
-                </span>
-              )}
+              <div className="relative m-1">
+                {message.get("creator")?.id !== uuid && (
+                  <div className="absolute top-3 left-0 rounded-ful h-5 w-5 hover:h-8">
+                    <img
+                      className="flex h-5 w-5 rounded-full"
+                      src={
+                        message.get("creator").get("avatar") &&
+                        message.get("creator").get("avatar").url()
+                      }
+                      alt="avatar"
+                    />
+                  </div>
+                )}
+              </div>
+
               <div
                 className={`${
                   message.get("creator")?.id === uuid
-                    ? "bg-gray-100"
-                    : "bg-indigo-200"
-                }  rounded-2xl py-1 px-2 max-w-[75%] items-start justify-start flex flex-row`}
+                    ? "bg-indigo-200"
+                    : "bg-slate-50"
+                } rounded-2xl border py-1 px-2 max-w-[85%] `}
               >
                 {/* <span className="text-xs">
                     {message.get("delivered") ? "delivered " : "sent "}{" "}
                   </span> */}
-                {message.get("creator")?.id !== uuid && (
-                  <span className="text-indigo-600 font-semibold text-sm">
-                    <div className="flex flex-row items-start justify-start py-1">
-                      <p>{message.get("senderName")}</p>
-                      <p>~&nbsp;</p>
-                      {"  "}
-                    </div>
-                  </span>
-                )}
-                <p className="break-all">{message.get("content")} </p>
+                <div className="ml-2 items-start justify-start flex flex-row">
+                  {message.get("creator")?.id !== uuid && (
+                    <span className="text-indigo-600 font-semibold text-xs">
+                      <div className="flex flex-row items-start justify-start py-1">
+                        <p>{message.get("senderName")}</p>
+                        <p>~&nbsp;</p>
+                        {"  "}
+                      </div>
+                    </span>
+                  )}
+
+                  <p className="break-all text-[15px] text-slate-800 self-center">
+                    {message.get("content")}
+                  </p>
+                </div>
               </div>
             </div>
           ))}

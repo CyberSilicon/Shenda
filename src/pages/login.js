@@ -37,9 +37,8 @@ export default function Login() {
         setFormLogin
       );
       if (user) {
-        // toastSuccessLogin(); // show success message
         await router.push("/");
-        return;
+        // return;
       }
     } catch (error) {
       // toastErrorLogin(error.message); // show error message
@@ -47,17 +46,6 @@ export default function Login() {
       return false;
     }
   }, [formLogin]);
-
-  // const toastErrorLogin = (err) =>
-  //   toast.error(err || "Invalid username or password", {
-  //     position: "top-right",
-  //     autoClose: 5000,
-  //     hideProgressBar: false,
-  //     closeOnClick: true,
-  //     pauseOnHover: true,
-  //     draggable: true,
-  //     progress: undefined,
-  //   });
 
   return (
     <>
@@ -157,33 +145,10 @@ export default function Login() {
               disabled={formLogin.loading}
               className="group relative flex w-full justify-center rounded-md border border-transparent bg-zinc-800 py-2 px-4 text-sm font-medium text-white hover:bg-zinc-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
             >
-              {formLogin.loading ? "Loading" : "Log in"}
-              {formLogin.loading && (
-                <svg
-                  class="animate-spin -mr-1 ml-3 h-5 w-5 text-white"
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 24 24"
-                >
-                  <circle
-                    class="opacity-25"
-                    cx="12"
-                    cy="12"
-                    r="10"
-                    stroke="currentColor"
-                    stroke-width="4"
-                  />
-                  <path
-                    d="M12 22C17.5228 22 22 17.5228 22 12H19C19 15.866 15.866 19 12 19V22Z"
-                    class="opacity-75"
-                    fill="currentColor"
-                  ></path>
-                  <path
-                    d="M2 12C2 6.47715 6.47715 2 12 2V5C8.13401 5 5 8.13401 5 12H2Z"
-                    class="opacity-75"
-                    fill="currentColor"
-                  ></path>
-                </svg>
-              )}
+              {formLogin.loading ? "Loading..." : "Log in"}
+              {/* {formLogin.loading && (
+                <div className="loader ease-linear rounded-full border-8 border-t-8 border-gray-200 h-64 w-64" />
+              )} */}
             </button>
           </div>
         </div>
