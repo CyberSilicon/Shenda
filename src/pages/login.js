@@ -1,5 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-// react/no-unescaped-entities
 import Head from "next/head";
 import Image from "next/image";
 import Link from "next/link";
@@ -7,7 +5,6 @@ import React, { useCallback, useState } from "react";
 import logo from "../../public/geologo.png";
 import { useRouter } from "next/router";
 import { useCurrentUserActions } from "../store/actions/useCurrentUserActions";
-// import { callParseLogin } from "../lib/api";
 // import Cookies from "js-cookie";
 
 export default function Login() {
@@ -38,20 +35,6 @@ export default function Login() {
         router,
         setFormLogin
       );
-      //   await callParseLogin(formLogin.username, formLogin.password)
-      //     // Save data and connect to db
-      //     .then(async (loggedInUser) => {
-      //       if (loggedInUser.code === undefined) {
-      //         Cookies.set("sessionTokenCurrentUser", loggedInUser.sessionToken);
-      //         await router.push("/");
-      //         return;
-      //       }
-      //       throw new Error(loggedInUser.error);
-      //     })
-      //     // Render And show error
-      //     .catch((error) => {
-      //       console.log(error.message);
-      //     });
     } catch (error) {
       // Error can be caused by wrong parameters or lack of Internet connection
       console.log(`Error! ${error.message}`);
