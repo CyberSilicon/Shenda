@@ -36,7 +36,7 @@ export default function Login() {
         router,
         setFormLogin
       );
-      if (user !== null && user !== undefined) {
+      if (user) {
         await router.push("/");
         return true;
       }
