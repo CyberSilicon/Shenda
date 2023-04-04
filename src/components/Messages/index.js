@@ -4,12 +4,12 @@ import { client } from "../../config/LiveQueryClient";
 import { useRecoilValue } from "recoil";
 import { currentUserStore } from "../../store/atoms/currentUserStore";
 
+// import "../../styles/Message.module.css";
+
 const Messages = () => {
   const [messages, setMessages] = useState([]);
   const [inputMessage, setInputMessage] = useState("");
 
-  const [showAnimation, setShowAnimation] = useState(false);
-  const [messageSent, setMessageSent] = useState(false);
   // const [lastMessageRef, setLastMessageRef] = useState(null);
 
   // Get a reference to the message container
@@ -33,10 +33,10 @@ const Messages = () => {
         content: inputMessage,
         senderName: username,
         creator: ParseUser[0],
+        // delivered: true,
       });
 
       setInputMessage("");
-      setMessageSent(true);
 
       // Scroll to the bottom of the message container
       const el = document.getElementById("chat-feed");
@@ -63,27 +63,25 @@ const Messages = () => {
 
   // Handle subscribing to live messages using Parse LiveQuery
   const handleGetLiveMessage = useCallback(async () => {
+    //*
     const parseQuery = new Parse.Query("Message");
     parseQuery.ascending("createdAt");
 
     // const sendSoundMsg = new Audio("send-message.mp3");
-    const receiveSoundMsg = new Audio("message-notification.mp3");
+    // const receiveSoundMsg = new Audio("message-notification.mp3");
 
     // Subscribe to the Parse LiveQuery and set up event listeners for new messages
     let subscription = await client.subscribe(parseQuery);
-
     subscription.on(
       "create",
-      async (m) => {
+      async (newMsg) => {
         // Update the state variable with the new message
+        setMessages((message) => message.concat(newMsg));
 
-        setMessages((message) => message.concat(m));
-        // receiveSoundMsg.play();
-
-        // if (m.get("senderId") !== uuid) {
-        //   console.log(m.get("senderId") + " and " + uuid);
-        //   return;
+        // if (uuid !== newMsg.get("creator"  )?.id && uuid ) {
+        //   return receiveSoundMsg.play();
         // }
+        // sendSoundMsg.play();
 
         // setMessages([...messages, { text: inputMessage, from: uuid }]);
       },
@@ -101,18 +99,6 @@ const Messages = () => {
   }, []);
 
   //*Animation on send msg
-
-  const messageRef = useRef(null);
-
-  useEffect(() => {
-    if (showAnimation && messageRef.current) {
-      messageRef.current.classList.add("message-animation");
-      setTimeout(() => {
-        messageRef.current.classList.remove("message-animation");
-        setShowAnimation(false);
-      }, 1000);
-    }
-  }, [showAnimation]);
 
   // Custom hook to scroll to the bottom of the message container
   function useChatScroll() {
@@ -146,12 +132,29 @@ const Messages = () => {
   //     setInputMessage("");
   //   }
   // };
+
+  // function parseMessageToChatMessage(parseMessage) {
+  //   return {
+  //     id: parseMessage.id,
+  //     message: parseMessage.get("content"),
+  //     senderName: parseMessage.get("senderName"),
+  //     timestamp: parseMessage.createdAt.toLocaleTimeString().toString(),
+  //     avatar: parseMessage.get("creator").get("avatar")
+  //       ? parseMessage.get("creator").get("avatar").url()
+  //       : undefined,
+  //     // Add any other properties that the ChatMessage component needs here
+  //   };
+  // }
+
   return (
     <div className="h-screen flex flex-col flex-auto">
       <div className="h-16 px-7 flex items-center justify-between border-b shadow-sm">
         <h1 className="text-xl font-bold">Discussion</h1>
-        <button className="hover:text-indigo-800 py-2 px-3 rounded-sm">
-          Actives users
+        <button
+          className="hover:text-indigo-800 py-2 px-3 rounded-sm"
+          title="Active users"
+        >
+          Active users
         </button>
       </div>
 
@@ -160,61 +163,70 @@ const Messages = () => {
           messages &&
           messages.map((message, index) => (
             <div
-              ref={messageRef}
               key={index}
               className={`${
                 message.get("creator")?.id === uuid
                   ? "justify-end"
                   : "justify-start"
-              } flex flex-row mb-1 `}
-              onAnimationEnd={() => setMessageSent(false)}
+              } flex flex-row mb-1`}
             >
-              {message.get("creator")?.id !== uuid && (
-                <span className=" inline-block relative mr-2 self-center">
-                  <img
-                    className="flex h-8 w-8 rounded-full"
-                    src={
-                      message.get("creator").get("avatar") &&
-                      message.get("creator").get("avatar").url()
-                    }
-                    alt="avatar"
-                  />
-                  {/* <span className="absolute bottom-0 right-0 block h-2.5 w-2.5 rounded-full ring-2 ring-white bg-green-400"></span> */}
-                </span>
-              )}
+              <div className="relative m-1">
+                {message.get("creator")?.id !== uuid && (
+                  <div className="absolute top-3 left-0 rounded-ful h-5 w-5 hover:h-8">
+                    <img
+                      className="flex h-5 w-5 rounded-full"
+                      src={
+                        message.get("creator").get("avatar") &&
+                        message.get("creator").get("avatar").url()
+                      }
+                      alt="avatar"
+                    />
+                  </div>
+                )}
+              </div>
+
               <div
                 className={`${
                   message.get("creator")?.id === uuid
-                    ? "bg-gray-100"
-                    : "bg-indigo-200"
-                }  rounded-3xl py-1 px-3 max-w-[75%] items-center justify-center  flex flex-row`}
+                    ? "bg-indigo-200"
+                    : "bg-slate-50"
+                } rounded-2xl border py-1 px-2 max-w-[85%] `}
               >
-                {message.get("creator")?.id !== uuid && (
-                  <span className="text-indigo-600 font-semibold text-sm">
-                    <div className="flex flex-row">
-                      <p>{message.get("senderName")}</p>
-                      <p>~&nbsp;</p>
-                      {"  "}
-                    </div>
-                  </span>
-                )}
-                <p className="break-all">{message.get("content")} </p>
+                {/* <span className="text-xs">
+                    {message.get("delivered") ? "delivered " : "sent "}{" "}
+                  </span> */}
+                <div className="ml-2 items-start justify-start flex flex-row">
+                  {message.get("creator")?.id !== uuid && (
+                    <span className="text-indigo-600 font-semibold text-xs">
+                      <div className="flex flex-row items-start justify-start py-1">
+                        <p>{message.get("senderName")}</p>
+                        <p>~&nbsp;</p>
+                        {"  "}
+                      </div>
+                    </span>
+                  )}
+
+                  <p className="break-all text-[15px] text-slate-800 self-center">
+                    {message.get("content")}
+                  </p>
+                </div>
               </div>
             </div>
           ))}
       </div>
 
-      <div className="h-16 bg-white px-4 flex items-center border">
+      <div className="h-16 bg-white px-2 flex flex-row items-center border">
         <input
           onKeyUp={(e) => handleSendMessageWithKey(e)}
           placeholder="Enter your message..."
           value={inputMessage}
           onChange={handleupdateInput}
-          className="max-w-[90%] flex-1 bg-transparent outline-none border-r-2 py-2 px-4 mr-2 break-words"
+          className=" flex-1 bg-transparent outline-none py-1 px-2 break-words"
         />
+        {/* <div className=" border-r border-slate-400 rounded-2xl m-2 h-8" /> */}
         <button
           disabled={inputMessage.trim().length < 1}
-          className="fixed right-2  py-2 px-2 rounded-md text-slate-900 font-semibold text-lg disabled:text-slate-400"
+          className="border-l-2 justify-center pl-4 pr-2  text-slate-900 font-semibold text-lg disabled:text-slate-400"
           onClick={inputMessage.trim().length > 0 ? handleSubmitMessage : null}
         >
           Send

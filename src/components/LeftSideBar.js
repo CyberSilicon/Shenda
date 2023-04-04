@@ -1,16 +1,15 @@
-import React from "react";
+import React, { useState } from "react";
+
+// import { ToastContainer, toast } from "react-toastify";
+// import "react-toastify/dist/ReactToastify.css";
 
 import HomeRoundedIcon from "@mui/icons-material/HomeRounded";
 import TagRoundedIcon from "@mui/icons-material/TagRounded";
-import PersonPinIcon from "@mui/icons-material/PersonPin";
-import LogoutRoundedIcon from "@mui/icons-material/LogoutRounded";
 import { Avatar, Tooltip, Zoom } from "@mui/material";
 import { tooltipClasses } from "@mui/material";
 import { styled } from "@mui/material";
 
 import Parse from "../services/parse";
-import Link from "next/link";
-import Image from "next/image";
 import { useRouter } from "next/router";
 import Cookies from "js-cookie";
 import { useRecoilValue } from "recoil";
@@ -31,20 +30,24 @@ const LeftSidebar = () => {
     }
   };
 
+  //****** DropDown Menu ****************
+  const [isOpen, setIsOpen] = useState(false);
+
+  const handleToggle = () => {
+    setIsOpen(!isOpen);
+  };
+  //****** *******************************
+
   return (
     <div className="flex top-0 left-0 h-screen max-sm:hidden">
       <div className="flex flex-col justify-between items-center w-16 m-1 p-1">
         {/* The head section */}
         <div className="border-b-2 max-sm:hidden">
-          <Link href="/">
-            <Image
-              src="/geologo.png"
-              alt="Shenda Logo"
-              width={60}
-              height={60}
-              className="sidebar-icon mb-2"
-            />
-          </Link>
+          <img
+            src={"/geologo.png"}
+            alt="Shenda Logo"
+            className="sidebar-icon mb-2 p-1"
+          />
         </div>
         {/* The main section */}
 
@@ -55,14 +58,6 @@ const LeftSidebar = () => {
               icon={<HomeRoundedIcon fontSize="large" />}
             />
           </div>
-
-          <div>
-            <SideBarIcon
-              iconToolTip="Home"
-              icon={<HomeRoundedIcon fontSize="large" />}
-            />
-          </div>
-
           <div>
             <SideBarIcon
               iconToolTip="Events"
@@ -78,16 +73,23 @@ const LeftSidebar = () => {
         </main>
         {/* The bottom section */}
         <div className="space-y-1 bottom-0 border-t-2 pt-1">
-          <div>
+          <button onClick={handleToggle}>
+            {isOpen && (
+              <div className="absolute z-10 left-16 mr-2 bottom-2 max-sm:bottom-0 bg-white border rounded-md shadow-xl">
+                <button className="block w-full px-4 py-2 text-left hover:bg-gray-100">
+                  Account
+                </button>
+                <button
+                  className="block w-full px-4 py-2 text-left hover:bg-gray-100"
+                  onClick={doUserLogOut}
+                >
+                  LogOut
+                </button>
+              </div>
+            )}
+            {/* //! update src path */}
             <SideBarIcon
-              iconToolTip="Profile"
               icon={<Avatar src={attrs.avatar && attrs.avatar.url} />}
-            />
-          </div>
-          <button onClick={doUserLogOut}>
-            <SideBarIcon
-              iconToolTip="Log Out"
-              icon={<LogoutRoundedIcon fontSize="large" />}
             />
           </button>
         </div>
@@ -106,7 +108,7 @@ const CustomTooltip = styled(({ className, ...props }) => (
     backgroundColor: "#0c0016",
   },
 }));
-const SideBarIcon = ({ icon, iconToolTip = "tooltip" }) => (
+const SideBarIcon = ({ icon, iconToolTip }) => (
   <CustomTooltip
     title={iconToolTip}
     arrow
