@@ -6,8 +6,6 @@ import { useCurrentUserActions } from "../store/actions/useCurrentUserActions";
 import { useRouter } from "next/router";
 import logo from "../../public/geologo.png";
 
-// import { ToastContainer, toast } from "react-toastify";
-// import "react-toastify/dist/ReactToastify.css";
 
 export default function Login() {
   const [formLogin, setFormLogin] = useState({
