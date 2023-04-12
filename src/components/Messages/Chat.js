@@ -1,12 +1,19 @@
-import React, { useState, useRef, useEffect, useCallback } from "react";
+import React, {
+  useState,
+  useRef,
+  useEffect,
+  useCallback,
+  forwardRef,
+} from "react";
 import Parse from "../../services/parse";
 import { client } from "../../config/LiveQueryClient";
 import { useRecoilValue } from "recoil";
 import { currentUserStore } from "../../store/atoms/currentUserStore";
+import FlipMove from "react-flip-move";
 
 // import "../../styles/Message.module.css";
 
-const Messages = () => {
+const Chat = forwardRef((ref) => {
   const [messages, setMessages] = useState([]);
   const [inputMessage, setInputMessage] = useState("");
 
@@ -18,10 +25,11 @@ const Messages = () => {
   // Get current user data from Recoil
   const { uuid, username } = useRecoilValue(currentUserStore);
 
-  const handleSubmitMessage = async () => {
+  const handleSubmitMessage = async (e) => {
     try {
-      const newUser = new Parse.Query(Parse.User);
+      e.preventDefault();
 
+      const newUser = new Parse.Query(Parse.User);
       newUser.equalTo("objectId", uuid);
       const ParseUser = await newUser.find();
 
@@ -78,11 +86,6 @@ const Messages = () => {
         // Update the state variable with the new message
         setMessages((message) => message.concat(newMsg));
 
-        // if (uuid !== newMsg.get("creator"  )?.id && uuid ) {
-        //   return receiveSoundMsg.play();
-        // }
-        // sendSoundMsg.play();
-
         // setMessages([...messages, { text: inputMessage, from: uuid }]);
       },
       []
@@ -119,12 +122,6 @@ const Messages = () => {
     [inputMessage]
   );
 
-  const handleSendMessageWithKey = (e) => {
-    if (inputMessage.trim().length > 0) {
-      e.key === "Enter" && handleSubmitMessage();
-    }
-  };
-
   // const handleSendMessage = (e) => {
   //   e.preventDefault();
   //   if (inputMessage.trim()) {
@@ -136,7 +133,7 @@ const Messages = () => {
   // function parseMessageToChatMessage(parseMessage) {
   //   return {
   //     id: parseMessage.id,
-  //     message: parseMessage.get("content"),
+  //     messages: parseMessage.get("content"),
   //     senderName: parseMessage.get("senderName"),
   //     timestamp: parseMessage.createdAt.toLocaleTimeString().toString(),
   //     avatar: parseMessage.get("creator").get("avatar")
@@ -159,81 +156,70 @@ const Messages = () => {
       </div>
 
       <div id="chat-feed" ref={listRef} className="flex-1 overflow-y-auto p-4">
-        {uuid !== undefined &&
-          messages &&
-          messages.map((message, index) => (
-            <div
-              key={index}
-              className={`${
-                message.get("creator")?.id === uuid
-                  ? "justify-end"
-                  : "justify-start"
-              } flex flex-row mb-1`}
-            >
-              <div className="relative m-1">
-                {message.get("creator")?.id !== uuid && (
-                  <div className="absolute top-3 left-0 rounded-ful h-5 w-5 hover:h-8">
-                    <img
-                      className="flex h-5 w-5 rounded-full"
-                      src={
-                        message.get("creator").get("avatar") &&
-                        message.get("creator").get("avatar").url()
-                      }
-                      alt="avatar"
-                    />
-                  </div>
-                )}
-              </div>
+        <FlipMove enterAnimation="fade" appearAnimation="fade">
+          {uuid !== undefined &&
+            messages &&
+            messages.map((message, index) => (
+              <div key={index} className={`flex flex-row mb-1 `}>
+                <span className=" inline-block relative mr-2 self-start">
+                  <img
+                    className={`
+                     flex h-8 w-8 rounded-full`}
+                    src={
+                      message.get("creator").get("avatar") &&
+                      message.get("creator").get("avatar").url()
+                    }
+                    alt="avatar"
+                  />
+                  {/* <span className="absolute bottom-0 right-0 block h-2.5 w-2.5 rounded-full ring-2 ring-white bg-green-400"></span> */}
+                </span>
 
-              <div
-                className={`${
-                  message.get("creator")?.id === uuid
-                    ? "bg-indigo-200"
-                    : "bg-slate-50"
-                } rounded-2xl border py-1 px-2 max-w-[85%] `}
-              >
-                {/* <span className="text-xs">
-                    {message.get("delivered") ? "delivered " : "sent "}{" "}
-                  </span> */}
-                <div className="ml-2 items-start justify-start flex flex-row">
-                  {message.get("creator")?.id !== uuid && (
-                    <span className="text-indigo-600 font-semibold text-xs">
+                <div
+                  className={`bg-slate-50 rounded-2xl border py-1 px-2 max-w-[85%]`}
+                >
+                  <div className="mx-2 items-start justify-start flex flex-row">
+                    <span
+                      className={`${
+                        message.get("creator")?.id === uuid
+                          ? "text-red-500"
+                          : "text-indigo-600"
+                      }  font-semibold text-xs `}
+                    >
                       <div className="flex flex-row items-start justify-start py-1">
                         <p>{message.get("senderName")}</p>
                         <p>~&nbsp;</p>
                         {"  "}
                       </div>
                     </span>
-                  )}
 
-                  <p className="break-all text-[15px] text-slate-800 self-center">
-                    {message.get("content")}
-                  </p>
+                    <p className="break-all text-[15px] text-slate-800 self-center">
+                      {message.get("content")}
+                    </p>
+                  </div>
                 </div>
               </div>
-            </div>
-          ))}
+            ))}
+        </FlipMove>
       </div>
 
-      <div className="h-16 bg-white px-2 flex flex-row items-center border">
+      <form className="h-16 bg-white px-2 flex flex-row items-center border">
         <input
-          onKeyUp={(e) => handleSendMessageWithKey(e)}
           placeholder="Enter your message..."
           value={inputMessage}
           onChange={handleupdateInput}
-          className=" flex-1 bg-transparent outline-none py-1 px-2 break-words"
+          className="flex-1 bg-transparent outline-none py-1 px-2 break-words"
         />
-        {/* <div className=" border-r border-slate-400 rounded-2xl m-2 h-8" /> */}
         <button
-          disabled={inputMessage.trim().length < 1}
-          className="border-l-2 justify-center pl-4 pr-2  text-slate-900 font-semibold text-lg disabled:text-slate-400"
-          onClick={inputMessage.trim().length > 0 ? handleSubmitMessage : null}
+          type="submit"
+          disabled={!inputMessage}
+          className="flex-shrink-0 border-l-2 justify-center pl-4 pr-2  text-slate-900 font-semibold text-lg disabled:text-slate-400"
+          onClick={handleSubmitMessage}
         >
           Send
         </button>
-      </div>
+      </form>
     </div>
   );
-};
+});
 
-export default Messages;
+export default Chat;

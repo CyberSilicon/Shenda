@@ -4,7 +4,7 @@ import TypingAnimation from "../animation/typingEffect";
 
 const MainView = () => {
   return (
-    <div className="flex flex-1 flex-col w-7/12 h-[100vh] max-sm:hidden border-r border-l justify-center items-center">
+    <div className="flex flex-col w-7/12 h-[100vh] max-sm:hidden border-r border-l justify-center items-center">
       {/* <Map /> */}
 
       <div className="m-8 div-2 text-xl font-mono flex flex-1 flex-col h-full text-center justify-center items-center">

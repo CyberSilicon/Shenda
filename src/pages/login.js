@@ -1,9 +1,10 @@
 import Head from "next/head";
 import Link from "next/link";
 import React, { useCallback, useState } from "react";
-import { useRouter } from "next/router";
+import Image from "next/image";
 import { useCurrentUserActions } from "../store/actions/useCurrentUserActions";
-// import logo from "../../public/geologo.png";
+import { useRouter } from "next/router";
+import logo from "../../public/geologo.png";
 
 // import { ToastContainer, toast } from "react-toastify";
 // import "react-toastify/dist/ReactToastify.css";
@@ -36,8 +37,8 @@ export default function Login() {
         router,
         setFormLogin
       );
-      if (user) {
-        await router.push("/");
+      if (user !== null && user !== undefined) {
+        router.push("/");
         return true;
       }
     } catch (error) {
@@ -45,21 +46,23 @@ export default function Login() {
       console.log(`Error! ${error.message}`);
       return false;
     }
-  }, [formLogin]);
+  }, []);
 
   return (
     <>
       <Head>
-        <title>Log in</title>
+        <title>Shenda</title>
         <meta name="keywords" content="login" />
         meta
       </Head>
       <div className="flex min-h-full h-screen items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
         <div className="w-full max-w-md space-y-8">
           <div>
-            <img
-              src="geologo.png"
-              className="mx-auto w-auto h-28"
+            <Image
+              src={logo}
+              height={160}
+              width={110}
+              className="mx-auto w-auto"
               alt="Shenda logo"
             />
             <h2 className="mt-6 text-center text-3xl font-bold tracking-tight text-gray-900">
@@ -89,7 +92,6 @@ export default function Login() {
                 className="relative block w-full appearance-none rounded-none rounded-t-md border border-gray-300 px-3 py-2 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
                 placeholder="username"
                 type="username"
-                // id="email-address"
                 // autoComplete="email"
               />
             </div>
@@ -99,7 +101,6 @@ export default function Login() {
               </label>
               <input
                 onChange={(e) => ChangeValueInput(e.target)}
-                // id="password"
                 name="password"
                 type="password"
                 autoComplete="current-password"
@@ -113,7 +114,6 @@ export default function Login() {
           <div className="flex items-center justify-between">
             <div className="flex items-center">
               <input
-                id="remember-me"
                 name="remember-me"
                 type="checkbox"
                 className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
@@ -140,12 +140,13 @@ export default function Login() {
             <button
               onClick={() => {
                 doUserLogIn();
-                setFormLogin({ ...formLogin, loading: true });
+                // setFormLogin({ ...formLogin, loading: true });
               }}
-              disabled={formLogin.loading}
+              // disabled={formLogin.loading}
               className="group relative flex w-full justify-center rounded-md border border-transparent bg-zinc-800 py-2 px-4 text-sm font-medium text-white hover:bg-zinc-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
             >
-              {formLogin.loading ? "Loading..." : "Log in"}
+              Login
+              {/* {formLogin.loading ? "Loading..." : "Log in"} */}
               {/* {formLogin.loading && (
                 <div className="loader ease-linear rounded-full border-8 border-t-8 border-gray-200 h-64 w-64" />
               )} */}

@@ -1,27 +1,35 @@
-import { MapContainer, TileLayer,Marker,Popup } from 'react-leaflet'
-import 'leaflet/dist/leaflet.css'
-import 'leaflet-defaulticon-compatibility/dist/leaflet-defaulticon-compatibility.css'
-import "leaflet-defaulticon-compatibility";
-
-const Map = () => {
-
-  const coords = [36.714600, 4.045710]
-
-  return (
-    <div className='h-[65%] w-[90%] justify-center items-center rounded-xl overflow-auto'>
-      <MapContainer  className='h-full w-full' center={coords} zoom={13} scrollWheelZoom={false}>
-        <TileLayer
-          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-        />
-        <Marker position={coords}>
-          <Popup>
-            Welcome ! <br />
-          </Popup>
-        </Marker>
-      </MapContainer>
-    </div>
-  )
-}
-
-export default Map
+// import { MapContainer, TileLayer,Marker,Popup } from 'react-leaflet'
+// import 'leaflet/dist/leaflet.css'
+// import 'leaflet-defaulticon-compatibility/dist/leaflet-defaulticon-compatibility.css'
+// import "leaflet-defaulticon-compatibility";
+import { useEffect, useRef } from "react";
+import L from "leaflet";
+  
+  // Import leaflet.css file
+  import "leaflet/dist/leaflet.css";
+  
+  function Map() {
+    const mapRef = useRef(null);
+  
+    useEffect(() => {
+      const mapNode = mapRef.current;
+      const map = L.map(mapNode, {
+        center: [36.714600, 4.045710],
+        zoom: 13,
+      });
+  
+      L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+        attribution: "Map data &copy; OpenStreetMap contributors",
+        maxZoom: 18,
+      }).addTo(map);
+  
+      return () => {
+        map.remove();
+      };
+    }, []);
+  
+    return <div ref={mapRef} className="h-64 w-64"></div>;
+  }
+  
+  export default Map;
+  

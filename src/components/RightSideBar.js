@@ -1,10 +1,10 @@
 import React from "react";
-import Messages from "./Messages";
+import Chat from "./Messages/Chat";
 
 const RightSideBar = () => {
   return (
     <div className="flex flex-1 flex-col justify-between overflow-y-auto">
-      <Messages />
+      <Chat />
     </div>
   );
 };

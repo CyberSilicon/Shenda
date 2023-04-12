@@ -1,4 +1,6 @@
 import "../styles/globals.css";
+import "leaflet/dist/leaflet.css";
+
 import React, { useLayoutEffect, useMemo } from "react";
 import { RecoilRoot, useRecoilValue } from "recoil";
 import { currentUserStore } from "../store/atoms/currentUserStore";
