@@ -4,6 +4,7 @@ import React, { useCallback, useState } from "react";
 import Parse from "../services/parse";
 import Link from "next/link";
 import logo from "../../public/geologo.png";
+import { useRouter } from "next/router";
 
 export default function Login() {
   // State variables
@@ -11,6 +12,7 @@ export default function Login() {
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
 
+  const router = useRouter();
   // Functions used by the screen components
   const doUserRegistration = useCallback(async () => {
     try {
@@ -24,7 +26,10 @@ export default function Login() {
       );
       // console.log(username, password, email, createdUser);
       // alert(`Success! ${createdUser.getUsername()} was successfully created!`);
-      return true;
+      if (createdUser !== null && createdUser !== undefined) {
+        router.push("/");
+        return true;
+      }
     } catch (error) {
       // signUp can fail if any parameter is blank or failed an uniqueness check on the server
       console.log(`Error! ${error}`);
@@ -40,15 +45,15 @@ export default function Login() {
         meta
       </Head>
 
-      <div className="flex min-h-full items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+      <div className="flex min-h-full h-screen items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
         <div className="w-full max-w-md space-y-8">
           <div>
             <Image
               src={logo}
-              className="mx-auto w-auto"
-              alt="Shenda logo"
               height={160}
               width={110}
+              className="mx-auto w-auto"
+              alt="Shenda logo"
             />
             <h2 className="mt-6 text-center text-3xl font-bold tracking-tight text-gray-900">
               Create a Shenda Account{" "}

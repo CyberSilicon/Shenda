@@ -1,10 +1,4 @@
-import React, {
-  useState,
-  useRef,
-  useEffect,
-  useCallback,
-  forwardRef,
-} from "react";
+import React, { useState, useRef, useEffect, useCallback } from "react";
 import Parse from "../../services/parse";
 import { client } from "../../config/LiveQueryClient";
 import { useRecoilValue } from "recoil";
@@ -13,7 +7,7 @@ import FlipMove from "react-flip-move";
 
 // import "../../styles/Message.module.css";
 
-const Chat = forwardRef((ref) => {
+const Chat = () => {
   const [messages, setMessages] = useState([]);
   const [inputMessage, setInputMessage] = useState("");
 
@@ -163,8 +157,7 @@ const Chat = forwardRef((ref) => {
               <div key={index} className={`flex flex-row mb-1 `}>
                 <span className=" inline-block relative mr-2 self-start">
                   <img
-                    className={`
-                     flex h-8 w-8 rounded-full`}
+                    className={`flex h-8 w-8 rounded-full`}
                     src={
                       message.get("creator").get("avatar") &&
                       message.get("creator").get("avatar").url()
@@ -220,6 +213,6 @@ const Chat = forwardRef((ref) => {
       </form>
     </div>
   );
-});
+};
 
 export default Chat;

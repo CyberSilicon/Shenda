@@ -31,16 +31,14 @@ export default function Login() {
   const doUserLogIn = useCallback(async () => {
     // Note that these values come from state variables that we've declared before
     try {
-      const user = (await useCurrentUser).login(
-        formLogin.username,
-        formLogin.password,
-        router,
-        setFormLogin
-      );
-      if (user !== null && user !== undefined) {
-        router.push("/");
-        return true;
-      }
+      const user = (await useCurrentUser)
+        .login(formLogin.username, formLogin.password, router, setFormLogin)
+        .then(async () => {
+          if (user !== null && user !== undefined) {
+            await router.push("/");
+            return true;
+          }
+        });
     } catch (error) {
       // toastErrorLogin(error.message); // show error message
       console.log(`Error! ${error.message}`);
@@ -140,13 +138,12 @@ export default function Login() {
             <button
               onClick={() => {
                 doUserLogIn();
-                // setFormLogin({ ...formLogin, loading: true });
+                setFormLogin({ ...formLogin, loading: true });
               }}
-              // disabled={formLogin.loading}
+              disabled={formLogin.loading}
               className="group relative flex w-full justify-center rounded-md border border-transparent bg-zinc-800 py-2 px-4 text-sm font-medium text-white hover:bg-zinc-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
             >
-              Login
-              {/* {formLogin.loading ? "Loading..." : "Log in"} */}
+              {formLogin.loading ? "Loading..." : "Log in"}
               {/* {formLogin.loading && (
                 <div className="loader ease-linear rounded-full border-8 border-t-8 border-gray-200 h-64 w-64" />
               )} */}
