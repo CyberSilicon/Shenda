@@ -13,13 +13,13 @@ const MainView = () => {
         </p>
         <TypingAnimation
           text={
-            "your go-to solution for location-based communication within geofenced areas"
+            "Welcome to the new real-time chat application!"
           }
           delay={80}
         />
       </div>
       <div className="m-4 text-indigo-900">
-        Mapping the world around you
+        Welcome!
         {/* <TypingAnimation text={""} delay={100} /> */}
       </div>
     </div>
